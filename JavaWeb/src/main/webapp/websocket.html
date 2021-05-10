@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web chat</title>
+</head>
+<body>
+
+<input type="button" value="连接" onclick="createConnection()"/>
+<input type="button" value="断开" onclick="closeConnection()"/>
+<script>
+
+    /* 参考 https://www.cnblogs.com/1wen/p/5808276.html */
+
+    let ws = null;
+    let wsUrl = "ws://" + window.location.host + "/websocket";
+    let wsReconnectDelayTime = 2000;
+
+    function createConnection() {
+        if ("WebSocket" in window) {
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = (ev) => {
+                console.log('open connected')
+            };
+            ws.onmessage = (ev) => {
+                console.log('message event')
+            };
+            ws.onclose = (ev) => {
+                console.log('close event');
+                setTimeout(() => {
+                    createConnection();
+                }, wsReconnectDelayTime)
+            };
+            ws.onerror = (ev) => {
+                console.log('error event')
+            };
+        }
+    }
+
+    function closeConnection() {
+        if (ws) ws.close();
+    }
+
+</script>
+</body>
+</html>

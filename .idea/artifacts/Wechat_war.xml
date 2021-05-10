@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Wechat:war">
+    <output-path>$PROJECT_DIR$/Wechat/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>Wechat</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="Wechat.war">
+      <element id="artifact" artifact-name="Wechat:war exploded" />
+    </root>
+  </artifact>
+</component>

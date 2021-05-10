@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.zhn.demo</groupId>
+    <artifactId>LearnDemo</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>DesignModel</module>
+        <module>JavaBasic</module>
+        <module>JavaWeb</module>
+        <module>Netty</module>
+        <module>SomeLib</module>
+        <module>RabbitMQ</module>
+        <module>SpringAll</module>
+        <module>Redis</module>
+        <module>Swagger2</module>
+        <module>Wechat</module>
+        <module>Shiro</module>
+        <module>Log</module>
+        <module>web-example</module>
+        <module>socketio</module>
+        <module>changeprofile</module>
+        <module>crawler</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- 测试 -->
+        <junit.version>4.12</junit.version>
+
+        <!-- spring 全家桶 -->
+        <spring.version>5.0.5.RELEASE</spring.version>
+
+        <spring-redis.version>2.0.6.RELEASE</spring-redis.version>
+
+        <!-- json -->
+        <fastjson.version>1.2.47</fastjson.version>
+        <jackson.version>2.9.8</jackson.version>
+
+        <!-- 通用工具库 -->
+        <commons-io.version>2.6</commons-io.version>
+        <commons-fileupload.version>1.3.2</commons-fileupload.version>
+        <commons-codec.version>1.9</commons-codec.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-logging.version>1.1.1</commons-logging.version>
+
+        <!-- servlet 版本 -->
+        <servlet.version>3.1.0</servlet.version>
+
+        <!-- 框架netty -->
+        <netty.version>4.1.25.Final</netty.version>
+
+        <!-- httpclient 框架 -->
+        <httpclient.version>4.5.9</httpclient.version>
+
+        <!-- 办公文档 poi -->
+        <poi.version>3.17</poi.version>
+
+        <!-- 日志框架 slf4j  log4j2 -->
+        <slf4j.version>1.7.26</slf4j.version>
+        <log4j2.version>2.11.1</log4j2.version>
+
+        <!-- redis -->
+        <redis.version>2.9.0</redis.version>
+
+        <!-- mysql驱动 -->
+        <mysql-connect.version>5.1.46</mysql-connect.version>
+
+        <!-- Druid 数据源 -->
+        <druid.version>1.1.8</druid.version>
+
+        <!-- 动态代理cglib -->
+        <cglib.version>3.3.0</cglib.version>
+
+        <!-- rabbitmq -->
+        <rabbitmq-version>5.7.0</rabbitmq-version>
+        <springrabbitmq-version>2.0.3.RELEASE</springrabbitmq-version>
+
+        <swagger2.version>2.9.2</swagger2.version>
+
+        <!--  xml 库 -->
+        <xstream.version>1.4.10</xstream.version>
+        <dom4j.version>1.6.1</dom4j.version>
+
+        <!-- Mybatis Spring 整合包 -->
+        <mybatis-spring.version>1.3.1</mybatis-spring.version>
+        <!-- Mybatis -->
+        <mybatis.version>3.4.5</mybatis.version>
+
+        <lombok.version>1.18.8</lombok.version>
+
+        <!-- Aspectj 切面 -->
+        <aspectj.version>1.8.12</aspectj.version>
+
+        <hibernate-validate.version>6.1.0.Final</hibernate-validate.version>
+
+        <!-- 邮件发送 -->
+        <mail.version>1.4.7</mail.version>
+
+        <!-- netty-socketio -->
+        <netty-socketio.version>1.7.18</netty-socketio.version>
+
+
+    </properties>
+
+    <!-- 用于测试，对所有组件均可测试 -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+
+    </dependencies>
+</project>

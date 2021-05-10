@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="OFF">
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--只接受程序中DEBUG级别的日志进行处理-->            
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="[%d{MM-dd HH:mm:ss.SSS}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+        </Console>
+        <!--处理DEBUG级别的日志，并把该日志放到logs/debug.log文件中-->
+        <!--打印出DEBUG级别日志，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，
+            作为存档-->        
+        <RollingRandomAccessFile name="DebugFile" fileName="./logs/debug.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/debug-%d{dd}-%i.log">
+            <Filters>
+                <!--只接受DEBUG级别的日志，其余的全部拒绝处理-->                
+                <ThresholdFilter level="DEBUG"/>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <!--输出日志的格式-->            
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>  
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>            
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <!--处理INFO级别的日志，并把该日志放到logs/info.log文件中-->        
+        <RollingRandomAccessFile name="InfoFile" fileName="./logs/info.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/info-%d{dd}-%i.log">
+            <Filters>
+                <!--只接受INFO级别的日志，其余的全部拒绝处理-->
+                <ThresholdFilter level="INFO"/>                
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>   
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>            
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <!--处理WARN级别的日志，并把该日志放到logs/warn.log文件中-->      
+        <RollingRandomAccessFile name="WarnFile" fileName="./logs/warn.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/warn-%d{dd}-%i.log">
+            <Filters>          
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>      
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>         
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <!--处理error级别的日志，并把该日志放到logs/error.log文件中-->
+        <RollingRandomAccessFile name="ErrorFile" fileName="./logs/error.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/error-%d{dd}-%i.log">
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>          
+                <SizeBasedTriggeringPolicy size="600 KB"/>    
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!--默认的root的logger-->
+        <root level="debug">
+            <appender-ref ref="Console"/>
+            <!--&lt;!&ndash;<appender-ref ref="InfoFile"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<appender-ref ref="WarnFile"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<appender-ref ref="ErrorFile"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<appender-ref ref="DebugFile"/>&ndash;&gt;-->
+        </root>
+
+        <Logger name="log4j.logger.org.apache.shiro" level="TRACE"/>
+        <Logger name="log4j.logger.org.apache" level="WARN"/>
+        <Logger name="log4j.logger.org.springframework" level="WARN"/>
+        <Logger name="log4j.logger.org.apache.shiro.util.ThreadContext" level="WARN"/>
+        <Logger name="log4j.logger.org.apache.shiro.cache.ehcache.EhCache" level="WARN"/>
+
+    </Loggers>
+</Configuration>

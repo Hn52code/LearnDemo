@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DesignModel/DesignModel.iml" filepath="$PROJECT_DIR$/DesignModel/DesignModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaBasic/JavaBasic.iml" filepath="$PROJECT_DIR$/JavaBasic/JavaBasic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JavaWeb/JavaWeb.iml" filepath="$PROJECT_DIR$/JavaWeb/JavaWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/LearnDemo.iml" filepath="$PROJECT_DIR$/.idea/LearnDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Log/Log.iml" filepath="$PROJECT_DIR$/Log/Log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Netty/Netty.iml" filepath="$PROJECT_DIR$/Netty/Netty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RabbitMQ/RabbitMQ.iml" filepath="$PROJECT_DIR$/RabbitMQ/RabbitMQ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Redis/Redis.iml" filepath="$PROJECT_DIR$/Redis/Redis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Shiro/Shiro.iml" filepath="$PROJECT_DIR$/Shiro/Shiro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SomeLib/SomeLib.iml" filepath="$PROJECT_DIR$/SomeLib/SomeLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringAll/SpringAll.iml" filepath="$PROJECT_DIR$/SpringAll/SpringAll.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Swagger2/Swagger2.iml" filepath="$PROJECT_DIR$/Swagger2/Swagger2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Wechat/Wechat.iml" filepath="$PROJECT_DIR$/Wechat/Wechat.iml" />
+      <module fileurl="file://$PROJECT_DIR$/changeprofile/changeprofile.iml" filepath="$PROJECT_DIR$/changeprofile/changeprofile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/crawler/crawler.iml" filepath="$PROJECT_DIR$/crawler/crawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/socketio/socketio.iml" filepath="$PROJECT_DIR$/socketio/socketio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/web-example/web-example.iml" filepath="$PROJECT_DIR$/web-example/web-example.iml" />
+    </modules>
+  </component>
+</project>

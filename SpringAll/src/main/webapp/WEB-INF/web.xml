@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <display-name>Archetype Created Web Application</display-name>
+
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!--web.xml中listener，filter，servlet 执行顺序。-->
+    <!--首先可以肯定的是，他们的执行顺序和摆放位置无关；加载顺序：context-param -> listener -> filter -> servlet-->
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:Spring.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+
+    <!--<filter>-->
+    <!--<filter-name>CharacterFilter</filter-name>-->
+    <!--<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
+    <!--<init-param>-->
+    <!--<param-name>encoding</param-name>-->
+    <!--<param-value>UTF-8</param-value>-->
+    <!--</init-param>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>CharacterFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <!-- 自定义过滤器 -->
+    <!-- 此处包括编码,IP过滤 -->
+    <filter>
+        <filter-name>CustomFilter</filter-name>
+        <filter-class>com.zhn.demo.spring.web.utils.WhiteListFilter</filter-class>
+        <!--设置编码-->
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <!--设置开启/关闭IP限制,默认关闭false-->
+        <!--<init-param>-->
+        <!--<param-name>openIPLimit</param-name>-->
+        <!--<param-value>false</param-value>-->
+        <!--</init-param>-->
+    </filter>
+    <filter-mapping>
+        <filter-name>CustomFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 处理PUT提交参数(只对基础表单生效) -->
+    <!--<filter>-->
+        <!--<filter-name>httpPutFormContentFilter</filter-name>-->
+        <!--<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>httpPutFormContentFilter</filter-name>-->
+        <!--&lt;!&ndash; 拦截所有 &ndash;&gt;-->
+        <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
+
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 参数，设置配置 -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:SpringMVC.xml</param-value>
+        </init-param>
+        <!-- 设置,异常url资源找不到捕捉状态开启 -->
+        <init-param>
+            <param-name>throwExceptionIfNoHandlerFound</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SpringMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <!--如果你在<url-pattern>/</url-pattern>编程<url-pattern>/*</url-pattern>Springmvc将会对jsp进行拦截导致其不能正常显示，
+    详细参考 https://blog.csdn.net/jinghuashuiyue2/article/details/78589655?locationNum=7&fps=1 -->
+
+
+</web-app>

@@ -1,0 +1,51 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="socketio:war exploded">
+    <output-path>$PROJECT_DIR$/socketio/target/socketio</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>socketio</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="socketio" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.corundumstudio.socketio:netty-socketio:1.7.18" />
+          <element id="library" level="project" name="Maven: io.netty:netty-buffer:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-common:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-transport:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-resolver:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-handler:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-codec-http:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-codec:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-transport-native-epoll:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: io.netty:netty-transport-native-unix-common:4.1.44.Final" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.21" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.1" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-core:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-web:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.47" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-test:5.0.5.RELEASE" />
+          <element id="library" level="project" name="Maven: junit:junit:4.12" />
+          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/socketio/target/socketio/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="socketio/web/Web" />
+    </root>
+  </artifact>
+</component>

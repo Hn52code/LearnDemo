@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhn.demo.webexample.dao.StudentMapper">
+
+    <resultMap id="map" type="student">
+        <id property="stuNo" column="stu_no"/>
+        <result property="stuName" column="stu_name"/>
+    </resultMap>
+
+    <!-- 添加 -->
+    <insert id="addNewStudent" parameterType="student">
+        insert into z_test_student (stu_name, sex, birthday, age, address)
+        values (#{stu.stuName}, #{stu.sex}, #{stu.birthday}, #{stu.age}, #{stu.address});
+    </insert>
+
+
+    <insert id="addStudents" parameterType="list">
+        insert into z_test_student (stu_name, sex, birthday, age, address)
+        values
+        <foreach collection="list" separator="," item="stu">
+            (#{stu.stuName}, #{stu.sex}, #{stu.birthday}, #{stu.age}, #{stu.address})
+        </foreach>
+    </insert>
+
+    <delete id="delStudent" parameterType="int">
+        delete
+        from z_test_student
+        WHERE stu_no = #{0}
+    </delete>
+
+    <delete id="delStudents" parameterType="list">
+        delete
+        from z_test_student
+        <where>
+            <foreach collection="list" item="stuNo" open="stu_no in(" close=")" separator=",">
+                #{stuNo}
+            </foreach>
+        </where>
+    </delete>
+
+
+    <update id="modifyStudent" parameterType="student">
+        update z_test_student
+        <set>
+            <if test="stu.stuName != null and stu.stuName != ''">
+                stu_name = #{stu.stuName},
+            </if>
+            <if test="stu.sex != -1 ">
+                sex = #{stu.sex},
+            </if>
+            <if test="stu.birthday != null ">
+                birthday = #{stu.birthday},
+            </if>
+            <if test="stu.age != -1 ">
+                age = #{stu.age},
+            </if>
+            <if test="stu.address != null and stu.address != ''">
+                address = #{stu.address},
+            </if>
+        </set>
+        <where>
+            stu_no = #{stu.stuNo}
+        </where>
+    </update>
+
+    <select id="getStudent" parameterType="int" resultType="student">
+
+        select stu_no,
+               stu_name,
+               age,
+               sex,
+               address,
+               birthday,
+               is_student,
+               state,
+               date_format(create_time, '%Y-%m-%d %H:%i:%s') createTime,
+               date_format(create_time, '%Y-%m-%d %H:%i:%s') loginTime,
+               create_time                                   createTime2,
+               login_time                                    loginTime2
+        from z_test_student
+        WHERE stu_no = #{0}
+    </select>
+
+    <select id="allStudents" resultType="student">
+
+        select stu_no,
+               stu_name,
+               age,
+               sex,
+               address,
+               birthday,
+               is_student,
+               state,
+               create_time,
+               login_time
+        from z_test_student
+    </select>
+
+    <!--
+
+    判断记录是否存在的sql，不同的写法，也会有不同的性能。
+        select count(*) from tablename where col = 'col';
+        这种方法性能上有些浪费，没必要把全部记录查出来。
+        select 1 from tablename where col = 'col' limit 1;
+        执行这条sql语句，所影响的行数不是0就是1。
+    特别解释下limit 1，mysql在找到一条记录后就不会往下继续找了。性能提升很多。
+
+    改进  ->    SELECT IFNULL((select 1 from z_test_student where stu_no = 57 limit 1),0) result;
+    -->
+
+    <select id="isExist" resultType="boolean" parameterType="int">
+        SELECT IFNULL((select 1 from z_test_student where stu_no = 57 limit 1), 0) result;
+    </select>
+
+    <select id="isExist2" resultType="boolean" parameterType="int">
+        select count(stu_no)
+        from z_test_student
+        where stu_no = #{0}
+    </select>
+
+
+    <!-- 添加 返回自增ID -->
+    <insert id="addAndReturnId" parameterType="student">
+        <selectKey resultType="integer" keyProperty="stu.stuNo" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+        insert into z_test_student (stu_name, sex, birthday, age, address)
+        values (#{stu.stuName}, #{stu.sex}, #{stu.birthday}, #{stu.age}, #{stu.address});
+    </insert>
+    <!--<insert id="addAndReturnId" parameterType="student" useGeneratedKeys="true" keyProperty="stu.stuNo">-->
+        <!--insert into z_test_student (stu_name, sex, birthday, age, address)-->
+        <!--values (#{stu.stuName}, #{stu.sex}, #{stu.birthday}, #{stu.age}, #{stu.address});-->
+    <!--</insert>-->
+
+</mapper>

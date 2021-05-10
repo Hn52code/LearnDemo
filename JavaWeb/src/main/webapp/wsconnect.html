@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>web chat</title>
+</head>
+<body>
+
+<input type="button" value="连接" onclick=""/>
+<input type="button" value="断开" onclick=""/>
+<script>
+
+    /* https://www.cnblogs.com/1wen/p/5808276.html */
+
+
+    let WebsocketSession = function (url) {
+        let warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
+        let ws = null;
+
+        function _create(url) {
+            ws = new WebSocket(url);
+            this.ws.onopen = (ev) => {
+                console.log('open connected');
+                this.checkHeartbeat.sendPing();
+            };
+            this.onmessage = (ev) => {
+                console.log('message event');
+                this.checkHeartbeat.reset();
+            };
+            this.onclose = (ev) => {
+                console.log('close event');
+                this.connect();
+            };
+            this.onerror = (ev) => {
+                console.log('error event')
+            };
+        }
+
+        if ("WebSocket" in window) {
+            return _create(url);
+        } else {
+            alert(warnText);
+            console.warn(warnText)
+        }
+    };
+
+    let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
+    let instance = new WebsocketSession(wsUrl);
+
+    // checkHeartbeat: {
+    //     timeout: 2 * 1000,
+    //         timeoutObj: null,
+    //         sendPing() {
+    //         this.timeout = setTimeout(this.ws.send('ping'), this.checkHeartbeat.timeout)
+    //     },
+    //     reset() {
+    //         clearTimeout(this.timeoutObj);
+    //         this.sendPing();
+    //     }
+    // },
+
+
+</script>
+</body>
+</html>

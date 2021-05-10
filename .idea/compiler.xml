@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Redis" />
+        <module name="socketio" />
+        <module name="SomeLib" />
+        <module name="Netty" />
+        <module name="Shiro" />
+        <module name="changeprofile" />
+        <module name="Log" />
+        <module name="Wechat" />
+        <module name="DesignModel" />
+        <module name="SpringAll" />
+        <module name="crawler" />
+        <module name="JavaBasic" />
+        <module name="Swagger2" />
+        <module name="RabbitMQ" />
+        <module name="JavaWeb" />
+        <module name="web-example" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="changeprofile" target="1.8" />
+      <module name="crawler" target="1.8" />
+      <module name="DesignModel" target="1.8" />
+      <module name="JavaBasic" target="1.8" />
+      <module name="JavaWeb" target="1.8" />
+      <module name="LearnDemo" target="1.8" />
+      <module name="Log" target="1.8" />
+      <module name="Netty" target="1.8" />
+      <module name="RabbitMQ" target="1.8" />
+      <module name="Redis" target="1.8" />
+      <module name="Shiro" target="1.8" />
+      <module name="socketio" target="1.8" />
+      <module name="SomeLib" target="1.8" />
+      <module name="SpringAll" target="1.8" />
+      <module name="Swagger2" target="1.8" />
+      <module name="web-example" target="1.8" />
+      <module name="Wechat" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

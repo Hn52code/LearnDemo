@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--status="WARN" :用于设置log4j2自身内部日志的信息输出级别，默认是OFF-->
+<!--monitorInterval="30"  :间隔秒数,自动检测配置文件的变更和重新配置本身-->
+<Configuration status="WARN">
+
+    <!-- 输出源声明 -->
+    <Appenders>
+        <!-- 控制台输出 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--接受程序中 DEBUG及以上 级别的日志进行处理-->            
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <!--打印位置信息（类名，方法名和行号）会严重影响性能-->
+            <PatternLayout pattern="[%d{MM-dd HH:mm:ss}] %-5level %class{36} %L - %msg%xEx%n"/>
+        </Console>
+
+        <!--********************下列是自配置日志文件输出目的地**********************-->
+
+        <!--处理DEBUG级别的日志，并把该日志放到logs/debug.log文件中-->
+        <!--打印出DEBUG级别日志，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->  
+        <!-- RollingRandomAccessFile 性能高于 RollingFile -->      
+        <RollingRandomAccessFile name="rrafDebug" fileName="./logs/debug.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/debug-%d{dd}-%i.log">
+            <!-- 过滤器 -->
+            <!--只接受DEBUG级别的日志，其余的全部拒绝处理-->
+            <Filters>
+                <!--级别过滤-->
+                <ThresholdFilter level="DEBUG"/>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <!--输出日志的格式-->            
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>  
+            <!-- 日志文件大-设定 -->
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>            
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!--处理INFO级别的日志，并把该日志放到logs/info.log文件中-->        
+        <RollingRandomAccessFile name="rrafInfo" fileName="./logs/info.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/info-%d{dd}-%i.log">
+            <!--只接受INFO级别的日志，其余的全部拒绝处理-->
+            <Filters>
+                <ThresholdFilter level="INFO"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>   
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>            
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!--处理WARN级别的日志，并把该日志放到logs/warn.log文件中-->      
+        <RollingRandomAccessFile name="rrafWarn" fileName="./logs/warn.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/warn-%d{dd}-%i.log">
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>      
+            <Policies>
+                <SizeBasedTriggeringPolicy size="600 KB"/>         
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!--处理ERROR级别的日志，并把该日志放到logs/error.log文件中-->
+        <RollingRandomAccessFile name="rrafError" fileName="./logs/error.log"
+                                 filePattern="./logs/$${date:yyyy-MM}/error-%d{dd}-%i.log">
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <Policies>          
+                <SizeBasedTriggeringPolicy size="600 KB"/>    
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <!--druid的日志记录追加器-->
+        <RollingFile name="druidSqlRollingFile" fileName="./logs/druid-sql.log"
+                     filePattern="logs/$${date:yyyy-MM}/api-%d{dd}-%i.log.gz">
+                   
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss}] %-5level %L %M - %msg%xEx%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="500 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- 所有的Logger的父类，根logger， -->
+        <Root level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+
+            <!-- 需要将日志输入文件时，取消注释 -->
+            <!--<AppenderRef ref="rrafDebug"/>-->
+            <!--<AppenderRef ref="rrafInfo"/>-->
+            <!--<AppenderRef ref="rrafWarn"/>-->
+            <!--<AppenderRef ref="rrafError"/>-->
+        </Root>
+
+        <!-- 当我想为某一目录下添加logger时，可如下写：-->
+        <!--<Logger name="com.zhn.demo.log" level="DEBUG" additivity="true">-->
+        <!--<AppenderRef ref="Console"/>-->
+        <!--</Logger>-->
+
+        <!-- 官方解释：但是上述例子发现日志被打印了两次，这是因为首先使用了与logger com.zhn.demo.log关联的附加程序， -->
+        <!--该附加程序将第一个实例写入控制台。接下来，com.zhn.demo.log的父对象，在本例中为root logger，因此被引用。-->
+        <!--然后将事件传递到其附加程序，该附加程序还将写入控制台，从而导致第二个实例。这称为可加性。尽管可加性是一个-->
+        <!--非常方便的功能（例如在前面的第一个示例中，无需配置任何附加引用），但在许多情况下，此行为被认为是不希望的，-->
+        <!--因此可以通过将记录器上的additivity属性设置为"false"来禁用它-->
+        <!--<Logger name="com.zhn.demo.log" level="DEBUG" additivity="false">-->
+        <!--<AppenderRef ref="Console"/>-->
+        <!--</Logger>-->
+
+        <!-- 这个就是自定义的一个logger -->
+        <!-- 输出级别是info级别及以上的日志，不要怕，StreamOperateFile已经过滤，只输出info级别的日志 -->
+        <!-- additivity 这个默认是true，即继承父类 root logger -->
+        <!-- 也就是说，你的这个日志也会在root的logger里面输出的，我这里配置false，就是不继承，各走各的。 -->
+        <!-- appender-ref 也就是说这个logger的输出目的地是哪里，ref就是关联到上面声明的一个file，一个console -->
+
+        <!--额外配置的logger-->
+        <!--记录druid-sql的记录-->        
+        <!--<Logger name="druid.sql.Statement" level="debug" additivity="false">-->
+            <!--<appender-ref ref="druidSqlRollingFile"/>-->
+        <!--</Logger>-->
+
+
+    </Loggers>
+</Configuration>

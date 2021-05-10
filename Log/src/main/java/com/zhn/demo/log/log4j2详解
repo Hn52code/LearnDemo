@@ -1,0 +1,45 @@
+2、配置文件节点说明
+
+2.1、根节点Configuration：有 Appenders 和 Loggers 两个子节点。
+
+status：用来指定 log4j 本身打印日志的级别。
+monitorinterval：用于指定 log4j 自动重新配置的监测间隔时间，单位是秒(s)，最小的间隔时间是5s。
+2.2、Appenders 节点
+有常见的 Console、RollingFile、File 三种子节点。
+
+2.2.1、Console：用于定义输出到控制台的 Appender。
+
+name：指定 Appender 的名字。
+target：SYSTEM_OUT 或 SYSTEM_ERR,一般只设置默认:SYSTEM_OUT。
+PatternLayout：输出格式，不设置默认为 %m%n。
+2.2.2、File：用于定义输出到指定位置的文件的 Appender。
+
+name：指定 Appender 的名字。
+fileName：指定输出日志的目的文件带全路径的文件名。
+PatternLayout：输出格式，不设置默认为 %m%n。
+2.2.3、RollingFile：定义指定方式触发新的 Appender。
+
+name：Appender 名字。
+fileName：输出日志文件的名字（带全路径）。
+filePattern：归档日志文件的文件名模式。
+PatternLayout：输出格式，不设置默认为：%m%n。
+Policies：指定滚动日志的策略。
+TimeBasedTriggeringPolicy：Policies 子节点，基于时间的滚动策略。interval 属性根据日期模式中最具体的时间单位进行翻转的频率，默认为1。
+SizeBasedTriggeringPolicy：Policies 子节点，基于文件大小的滚动策略。size属性用来定义每个日志文件的大小。大小可以以字节为单位指定，后缀为KB，MB或GB，例如20MB。
+DefaultRolloverStrategy：用来指定同一文件夹最多有几个日志文件时开始删除最旧的，创建新的(通过max属性)。
+2.3、Loggers 节点
+常见的有 Root 和 Logger 两种节点。
+
+2.3.1、Root：指定项目的根日志，如果没有单独指定 Logger，那么默认使用该 Root 日志输出。
+
+level：日志的输出级别，共8个级别，按照从低到高为 All < Trace < Debug < Info < Warn < Error < Fatal < OFF。
+AppenderRef：Root 的子节点，用来指定该日志输出到哪个 Appender。
+2.3.2、Logger：用来单独指定日志的形式。
+
+level：日志的输出级别，与 Root 一致。
+name：用来指定该Logger所适用的类或者类所在的包全路径,继承自Root节点。
+AppenderRef：Logger的子节点，用来指定该日志输出到哪个Appender,如果没有指定，就会默认继承自Root.如果指定了，那么会在指定的这个Appender和Root的Appender中都会输出，此时我们可以设置Logger的additivity="false"只在自定义的Appender中进行输出。
+
+
+
+https://blog.csdn.net/vbirdbest/article/details/71751835

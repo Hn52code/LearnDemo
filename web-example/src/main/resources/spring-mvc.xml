@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="com.zhn.demo.webexample.common"/>
+
+    <context:component-scan base-package="com.zhn.demo.webexample.controller"/>
+
+    <!-- <mvc:annotation-driven/>是告知Spring，我们启用注解驱动，为WEB 应用服务(我们就可以使用该标签注册的几个bean的功能)。
+    然后Spring会自动为我们注册上面说到的几个Bean到工厂中，来处理我们的请求。换句话说，<context:component-scan/>向容器中显式
+    或隐式注册了一系列单个组件，但是项目要想将组件关联起来正常运转，则需要<mvc:annotation-driven/>注册的组件完成。
+        比如请求一个URL，我要知道这个URL匹配哪个controller中的哪个方法。哪个Controller就需要<context:component-scan/>注解，
+        如何匹配，匹配哪个方法就需要<mvc:annotation-driven/>注解。-->
+
+    <mvc:annotation-driven validator="validator">
+        <!-- 不使用默认消息转换器 -->
+        <mvc:message-converters register-defaults="false">
+            <ref bean="stringHttpMessageConverter"/>
+            <ref bean="fastJsonHttpMessageConverter"/>
+            <ref bean="arrayHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--================消息转换器============================-->
+    <!-- 字符串消息转换器 spring默认的-->
+    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter">
+        <constructor-arg value="UTF-8"/>
+    </bean>
+    <!-- 二进制消息转换器（此处用于下载） -->
+    <bean id="arrayHttpMessageConverter" class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+    <!-- json消息转换器 此处采用的是fastjson -->
+    <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+        <!-- 若使用fastjson，则将控制类返回类转换为JSONArray,谁处理返回谁的类型 -->
+        <property name="supportedMediaTypes">
+            <list>
+                <!--<value>text/plain;charset=UTF-8</value>-->
+                <value>text/html;charset=UTF-8</value>
+                <value>application/json;charset=UTF-8</value>
+            </list>
+        </property>
+        <!--<property name="fastJsonConfig">-->
+        <!--<bean class="com.alibaba.fastjson.support.config.FastJsonConfig">-->
+        <!--<property name="serializerFeatures">-->
+        <!--<array>-->
+        <!--<value>WriteNullListAsEmpty</value>-->
+        <!--<value>WriteNullStringAsEmpty</value>-->
+        <!--<value>WriteNullBooleanAsFalse</value>-->
+        <!--</array>-->
+        <!--</property>-->
+        <!--</bean>-->
+        <!--</property>-->
+    </bean>
+
+    <!-- 允许资源通过 或者 在web.xml中配置servlet-mapping 配置 -->
+    <!--<mvc:resources mapping="/page/*" location="/page/"/>-->
+    <!-- swagger页面映射 -->
+    <mvc:resources location="classpath:/META-INF/resources/" mapping="/*.html"/>
+    <mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"/>
+
+    <!--  bean级别的校验 方法中的参数bean必须添加@Valid注解，后面紧跟着BindingResult result参数-->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+    <!--    方法级别的校验  要校验的方法所在类必须添加@Validated注解-->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <!-- 可以引用自己的 validator 配置，在本文中（下面）可以找到 validator 的参考配置，如果不指定则系统使用默认的 -->
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <!-- 多部分文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 此处设定最大允许上传大小10MB -->
+        <property name="maxUploadSize" value="10485760"/>
+        <property name="maxInMemorySize" value="4096"/> <!-- 设置默认的缓存大小 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- 配置视图资源 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!--<property name="prefix" value="/WEB-INF/"/>-->
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="jwtUil" class="com.zhn.demo.webexample.common.JwtUtil"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/api3/v1/**"/>
+            <mvc:exclude-mapping path="/api3/v1/login/**"/>
+            <!--<bean class="com.zhn.demo.webexample.common.UrlInterceptor">-->
+                <!--<constructor-arg ref="jwtUil"/>-->
+            <!--</bean>-->
+            <ref bean="urlInterceptor"/>
+        </mvc:interceptor>
+        <!-- 文件类型拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/file/**"/>
+            <bean class="com.zhn.demo.webexample.common.FileTypeIntInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

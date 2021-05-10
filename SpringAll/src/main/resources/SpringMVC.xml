@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.zhn.demo.spring.web.controller"/>
+
+    <!-- 消息转换器 -->
+    <mvc:annotation-driven>
+        <!-- 消息转换器 -->
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8"/>
+            </bean>
+            <!--fastjson-->
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!--这里顺序不能反，一定要先写text/html，不然IE下会出现下载提示-->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                &lt;!&ndash; 请求类型 &ndash;&gt;
+                <property name="defaultCharset" value="UTF-8"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                &lt;!&ndash; 响应默认处理方式 &ndash;&gt;
+                <property name="objectMapper">
+                    &lt;!&ndash; 自定义 objmapper&ndash;&gt;
+                    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+                        &lt;!&ndash; 时间格式 &ndash;&gt;
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg attr="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                            </bean>
+                        </property>
+                        &lt;!&ndash; 去掉空 &ndash;&gt;
+                        <property name="serializationInclusion" value="NON_NULL"/>
+                        &lt;!&ndash;骆驼峰转下划线，此处谨慎使用，主要看请求参数是否为下划线&ndash;&gt;
+                        &lt;!&ndash;<property name="propertyNamingStrategy" value="SNAKE_CASE"/>&ndash;&gt;
+                    </bean>
+                </property>
+            </bean>-->
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- 自定义枚举转换器 -->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <list>
+                <bean class="com.zhn.demo.spring.web.utils.StringToEnumConverterFactory"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 允许资源通过，3.0之前使用如下配置 -->
+    <!-- 注意mapping的值为uri后配**表示所有，切勿在location值后加**，否则找不到资源。-->
+    <mvc:resources location="/common/" mapping="/common/**"/>
+    <mvc:resources location="/background/" mapping="/background/**"/>
+    <mvc:resources location="/frontdesk/" mapping="/frontdesk/**"/>
+
+    <!--在SpringMVC3.0之后推荐使用<mvc:default-servlet-handler/>， 它会像一个检查员，对进入DispatcherServlet的URL进行筛查，
+    如果发现是静态资源的请求，就将该请求转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，才由DispatcherServlet继续处理。-->
+    <mvc:default-servlet-handler/>
+
+    <!-- 多部分文件上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="4096"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+    <!-- 参数校验器 -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不 加默认到 使用classpath下的 ValidationMessages.properties -->
+        <!--<property name="validationMessageSource" ref="messageSource"/>-->
+    </bean>
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <!-- 可以引用自己的 validator 配置，在本文中（下面）可以找到 validator 的参考配置，如果不指定则系统使用默认的 -->
+        <property name="validator" ref="validator"/>
+    </bean>
+
+    <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+    <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                &lt;!&ndash; 在web环境中一定要定位到classpath 否则默认到当前web应用下找  &ndash;&gt;
+                <value>classpath:validationMessages</value>
+                &lt;!&ndash;<value>classpath:org/hibernate/validator/ValidationMessages</value>&ndash;&gt;
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>-->
+
+    <!-- 配置视图解析器 -->
+    <!-- InternalResourceViewResolver:可以对html的解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 在视图解析器配置前缀与后缀 -->
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 配置拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/"/>
+            <mvc:exclude-mapping path="/img/"/>
+            <bean class="com.zhn.pro.demo.springweb.utils.TestHandlerInterceptor">
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

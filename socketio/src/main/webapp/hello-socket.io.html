@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://cdn.bootcss.com/socket.io/2.3.0/socket.io.js"></script>
+<script>
+    const socket = io('http://localhost:9999');
+    console.log(socket);
+
+    // 连接事件
+    socket.on('connect', () => {
+        socket.emit('server-rec', "hello server");
+    });
+
+    socket.on("client-rec", (data, ackServerBack) => {
+        console.log(data);
+        console.log(ackServerBack);
+    })
+
+</script>
+
+</body>
+</html>

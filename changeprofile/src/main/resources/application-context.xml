@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!-- context:property-placeholder 只能扫描一个路径下的所有文件指定文件，不能是多个不同目录 -->
+    <!--<context:property-placeholder location="classpath*:config/test/config-2.properties"/>-->
+    <!--<bean class="com.zhn.pro.web.pojo.Department">-->
+        <!--<property name="desc" value="${department.desc}"/>-->
+        <!--<property name="name" value="${department.name}"/>-->
+        <!--<property name="number" value="${department.number}"/>-->
+        <!--<property name="age" value="${department.age}"/>-->
+    <!--</bean>-->
+
+    <import resource="classpath:application-profile.xml"/>
+
+    <context:component-scan base-package="com.zhn.pro.web.entity"/>
+
+    <bean class="com.zhn.pro.web.pojo.Department">
+        <property name="id" value="${employ.id}"/>
+        <property name="desc" value="${department.desc}"/>
+        <property name="name" value="${department.name}"/>
+        <property name="number" value="${department.number}"/>
+        <property name="age" value="${department.age}"/>
+    </bean>
+
+    <beans profile="dev">
+        <context:property-placeholder location="classpath:config/dev/*.properties"/>
+    </beans>
+
+    <beans profile="test">
+        <context:property-placeholder location="classpath:config/test/*.properties"/>
+    </beans>
+
+    <beans profile="prod">
+        <context:property-placeholder location="classpath:config/prod/*.properties"/>
+    </beans>
+
+</beans>
