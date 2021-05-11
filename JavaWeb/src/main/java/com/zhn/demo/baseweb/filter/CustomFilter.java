@@ -13,7 +13,7 @@ import java.util.List;
 public class CustomFilter implements Filter {
 
     /* 编码 */
-    private String encoding;
+    private String encoding = "UTF-8";
     /* 开启IP限制 */
     private boolean openIPLimit;
     /* IP白名单 */
@@ -41,6 +41,7 @@ public class CustomFilter implements Filter {
         System.out.println("filter init ...");
         /* 获取编码 */
         String encoding = filterConfig.getInitParameter("encoding");
+        System.out.println(encoding);
         if (encoding != null) {
             this.encoding = encoding;
         }
@@ -54,12 +55,19 @@ public class CustomFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        if (encodingNotNull()) {
-            req.setCharacterEncoding(encoding);
-            resp.setCharacterEncoding(encoding);
-        }
+
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
+
+        System.out.println(request.getRequestURI());
+
+        if (encodingNotNull()) {
+            request.setCharacterEncoding(encoding);
+            response.setCharacterEncoding(encoding);
+            response.setContentType("text/html;charset=" + encoding);
+        }
+        System.out.println(request.getCharacterEncoding());
+
 
         if (isOpenIPLimit()) {
             String address = request.getRemoteAddr();

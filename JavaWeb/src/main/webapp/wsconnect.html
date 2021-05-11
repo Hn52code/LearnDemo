@@ -1,64 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>web chat</title>
 </head>
 <body>
 
 <input type="button" value="连接" onclick=""/>
 <input type="button" value="断开" onclick=""/>
+
 <script>
 
     /* https://www.cnblogs.com/1wen/p/5808276.html */
 
+    let WebSocketSession = function (url) {
+        // console.log(this); // this => window
+        /* 共有的，对象可调用 */
+        this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
+        this.maxConnectionLimit = 10;
+        this.wsUrl = url;
+        /* 私有的，只能内部调用 */
+        let _ws = null;
+        let _duration = null;
+        let _localTimer = null;
+        let _serverTimer = null;
+        let _connectedCount = 0;
 
-    let WebsocketSession = function (url) {
-        let warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
-        let ws = null;
+        function _ping() {
+            _duration = _duration === null ? 1000 : _duration;
+            _localTimer = setTimeout(() => {
+                _ws.send("ping");
+                _serverTimer = setTimeout(() => {
+                    _ws.close();
+                }, _duration * 2);
+            }, _duration);
+        }
 
-        function _create(url) {
-            ws = new WebSocket(url);
-            this.ws.onopen = (ev) => {
-                console.log('open connected');
-                this.checkHeartbeat.sendPing();
+        function _reset() {
+            clearTimeout(_localTimer);
+            clearTimeout(_serverTimer);
+            _ping();
+        }
+
+        function _create(wsUrl) {
+            _ws = new WebSocket(wsUrl);
+            _ws.onopen = (ev) => {
+                console.log('open connected', ev);
+                _ping();
             };
-            this.onmessage = (ev) => {
-                console.log('message event');
-                this.checkHeartbeat.reset();
+            _ws.onmessage = (ev) => {
+                console.log('message event', ev);
+                _reset();
             };
-            this.onclose = (ev) => {
-                console.log('close event');
-                this.connect();
+            _ws.onclose = (ev) => {
+                console.log('close event', ev);
+                reconnect();
             };
-            this.onerror = (ev) => {
-                console.log('error event')
+            _ws.onerror = (ev) => {
+                console.log('error event', ev);
+                reconnect();
             };
         }
 
+        function reconnect() {
+            let _this = this;
+            if (_connectedCount < _this.maxConnectionLimit) {
+                _create(_this.wsUrl);
+                _connectedCount++;
+            }
+        }
+
+        this.closeSession = function () {
+            if (_ws) _ws.close();
+        };
+
         if ("WebSocket" in window) {
+            _create.prototype = {};
             return _create(url);
         } else {
-            alert(warnText);
-            console.warn(warnText)
+            alert(this.warnText);
+            console.warn(this.warnText)
         }
     };
 
+    WebSocketSession.wx = "";
+
+
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
-    let instance = new WebsocketSession(wsUrl);
-
-    // checkHeartbeat: {
-    //     timeout: 2 * 1000,
-    //         timeoutObj: null,
-    //         sendPing() {
-    //         this.timeout = setTimeout(this.ws.send('ping'), this.checkHeartbeat.timeout)
-    //     },
-    //     reset() {
-    //         clearTimeout(this.timeoutObj);
-    //         this.sendPing();
-    //     }
-    // },
-
+    let instance = new WebSocketSession(wsUrl);
+    console.log(instance);
+    console.log(instance.warnText);
+    instance.closeSession();
 
 </script>
 </body>

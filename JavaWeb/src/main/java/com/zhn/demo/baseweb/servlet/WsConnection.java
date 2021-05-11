@@ -2,6 +2,7 @@ package com.zhn.demo.baseweb.servlet;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 
 @ServerEndpoint(value = "/wsconnect.ws")
 public class WsConnection {
@@ -13,8 +14,8 @@ public class WsConnection {
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) {
-
+    public void onMessage(String message, Session session) throws IOException {
+        if (message.equals("ping")) session.getBasicRemote().sendText("pong");
 
         System.out.println("[网页服务端监听]：来自会话: " + session.getId() + " 的信息: " + message);
     }
