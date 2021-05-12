@@ -20,7 +20,12 @@
     // 2        CLOSING            连接正在关闭
     // 3        CLOSED            连接已经关闭或不可用
 
-    let WebSocketSession = function (url) {
+    function WsSession(url, paras) {
+
+        if (typeof url !== "string") {
+            console.log(url);
+            return;
+        }
         // console.log(this); // this => window
         /* 共有的，对象可调用 */
         this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
@@ -28,7 +33,7 @@
         this.wsUrl = url;
         /* 私有的，只能内部调用 */
         let _ws = null;
-        let _duration = null;
+        let _delay = null;
         let _localTimer = null;
         let _serverTimer = null;
         let _connCount = 0;
@@ -36,7 +41,7 @@
 
         function _ping() {
             if (!_keepAlive) return;
-            _duration = _duration === null ? 1000 : _duration;
+            _delay = _delay === null ? 1000 : _delay;
             _localTimer = setTimeout(() => {
                 // 查询发送时的readyState状态
                 // console.log('when ping ', _ws.readyState);
@@ -45,8 +50,8 @@
                 _ws.send("ping");
                 _serverTimer = setTimeout(() => {
                     _ws.close();
-                }, _duration * 2);
-            }, _duration);
+                }, _delay * 2);
+            }, _delay);
         }
 
         function _reset() {
@@ -99,17 +104,17 @@
             alert(this.warnText);
             console.warn(this.warnText)
         }
-    };
+    }
 
-    WebSocketSession.wx = "";
 
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
-    let instance = new WebSocketSession(wsUrl);
-    console.log(instance);
-    console.log(instance.warnText);
+    // let instance = new WsSession(wsUrl);
+    // console.log(instance);
+    // console.log(instance.warnText);
     // setTimeout(() => {
     //     instance.closeSession()
     // }, 3200);
+    new WsSession();
 
 </script>
 </body>

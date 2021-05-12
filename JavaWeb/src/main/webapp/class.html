@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js 中类</title>
+</head>
+<body>
+ES5语法
+
+<script>
+
+    function Person(name) {
+        let nickname = name;
+        this.name = name;
+
+        this.getName = function () {
+            return this.name;
+        };
+        this.getNickName = function () {
+            return nickname;
+        };
+    }
+
+    let person = new Person("jack");
+    console.log(person.getName());          // jack
+    console.log(person.getNickName());      // jack
+    let person2 = new Person();
+    console.log(person2.getName());         // undefined
+    console.log(person2.getNickName());     // undefined
+
+</script>
+</body>
+</html>

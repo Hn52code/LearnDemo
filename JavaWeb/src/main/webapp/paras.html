@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>js 参数解构</title>
+</head>
+<body>
+
+js中==和===区别
+简单来说： == 代表相同， ===代表严格相同, 为啥这么说呢，
+
+这么理解： 当进行双等号比较时候： 先检查两个操作数数据类型，如果相同， 则进行===比较， 如果不同， 则愿意为你进行一次类型转换， 转换成相同类型后再进行比较， 而===比较时， 如果类型不同，直接就是false.
+
+
+操作数1 == 操作数2， 操作数1 === 操作数2
+
+比较过程：
+
+　　双等号==：
+
+　　（1）如果两个值类型相同，再进行三个等号(===)的比较
+
+　　（2）如果两个值类型不同，也有可能相等，需根据以下规则进行类型转换在比较：
+
+　　　　1）如果一个是null，一个是undefined，那么相等
+
+　　　　2）如果一个是字符串，一个是数值，把字符串转换成数值之后再进行比较
+
+　　
+
+　　三等号===:
+
+　　（1）如果类型不同，就一定不相等
+
+　　（2）如果两个都是数值，并且是同一个值，那么相等；如果其中至少一个是NaN，那么不相等。（判断一个值是否是NaN，只能使用isNaN( ) 来判断）
+
+　　（3）如果两个都是字符串，每个位置的字符都一样，那么相等，否则不相等。
+
+　　（4）如果两个值都是true，或是false，那么相等
+
+　　（5）如果两个值都引用同一个对象或是函数，那么相等，否则不相等
+
+　　（6）如果两个值都是null，或是undefined，那么相等
+<script>
+
+    console.log(null == undefined);     // true   值相等
+    console.log(null === undefined);    // false  值相等 类型不相等
+    // typeof 字符串  的返回值 "number" "String" "boolean" "object" "function" "undefined"
+
+    let obj = {
+        name: "zhn",
+        home: null,
+        getName: function () {
+            return this.name;
+        }
+    };
+    /* 解构已知参数 */
+    let {name} = obj;
+    console.log(name);
+    let {birth} = obj;
+    console.log(birth);     // undefined
+    // 判断解构的变量是否undefined
+    console.log(birth === undefined);   // true
+    // 判断解构的属性是否undefined
+    console.log(typeof birth === "undefined");   // true
+    // 解构参数赋值默认值，对象中属性有值则替换解构时默认值
+    let {home = 'sz'} = obj;
+    console.log(home);      // home = null
+    // 解构参数赋值默认值，此处给该对象中不包含的属性赋值默认值
+    let {age = 10} = obj;
+    console.log(age);       // age = 10
+
+    // 方法getName中使用了this
+    let {getName} = obj;
+    console.log(obj.getName());     // getName = "zhn"
+    console.log(getName());         // getName = ""
+
+    // 判断是否有某个属性
+    console.log(obj.hasOwnProperty("getName")); // true
+    console.log("name" in obj);                 // true
+    console.log("nickname" in obj);             // false
+
+    // 判断是否该属性类型是否为函数
+    console.log(typeof getName === "function"); //true
+
+    // 判断obj是否包含名为getName的函数
+    console.log(obj.hasOwnProperty("getName") && typeof obj.getName === "function"); //true
+
+</script>
+</body>
+</html>
