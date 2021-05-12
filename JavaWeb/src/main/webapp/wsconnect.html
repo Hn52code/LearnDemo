@@ -12,24 +12,36 @@
 
 <script>
 
-    /* https://www.cnblogs.com/1wen/p/5808276.html */
+    /* 参考了 https://www.cnblogs.com/1wen/p/5808276.html */
+
+    // WebSocket 中readyState状态说明
+    // 0        CONNECTING        连接尚未建立
+    // 1        OPEN            WebSocket的链接已经建立
+    // 2        CLOSING            连接正在关闭
+    // 3        CLOSED            连接已经关闭或不可用
 
     let WebSocketSession = function (url) {
         // console.log(this); // this => window
         /* 共有的，对象可调用 */
         this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
-        this.maxConnectionLimit = 10;
+        this.maxConnLimit = 10;
         this.wsUrl = url;
         /* 私有的，只能内部调用 */
         let _ws = null;
         let _duration = null;
         let _localTimer = null;
         let _serverTimer = null;
-        let _connectedCount = 0;
+        let _connCount = 0;
+        let _keepAlive = true;
 
         function _ping() {
+            if (!_keepAlive) return;
             _duration = _duration === null ? 1000 : _duration;
             _localTimer = setTimeout(() => {
+                // 查询发送时的readyState状态
+                // console.log('when ping ', _ws.readyState);
+                // 判断_ws是否处于连接状态，否则取消发送心跳检测
+                if (_ws.readyState !== 1) return;
                 _ws.send("ping");
                 _serverTimer = setTimeout(() => {
                     _ws.close();
@@ -43,8 +55,9 @@
             _ping();
         }
 
-        function _create(wsUrl) {
+        function _create() {
             _ws = new WebSocket(wsUrl);
+            // console.log(_ws);
             _ws.onopen = (ev) => {
                 console.log('open connected', ev);
                 _ping();
@@ -55,24 +68,28 @@
             };
             _ws.onclose = (ev) => {
                 console.log('close event', ev);
-                reconnect();
+                if (_keepAlive) reconnect();
             };
             _ws.onerror = (ev) => {
                 console.log('error event', ev);
-                reconnect();
+                if (_keepAlive) reconnect();
             };
         }
 
         function reconnect() {
             let _this = this;
-            if (_connectedCount < _this.maxConnectionLimit) {
-                _create(_this.wsUrl);
-                _connectedCount++;
+            if (_connCount < _this.maxConnLimit) {
+                _create(wsUrl);
+                _connCount++;
             }
         }
 
         this.closeSession = function () {
-            if (_ws) _ws.close();
+            if (_ws && _ws.readyState === 1) {
+                _keepAlive = false;
+                _ws.close();
+            }
+            console.dir(_ws);
         };
 
         if ("WebSocket" in window) {
@@ -86,12 +103,13 @@
 
     WebSocketSession.wx = "";
 
-
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
     let instance = new WebSocketSession(wsUrl);
     console.log(instance);
     console.log(instance.warnText);
-    instance.closeSession();
+    // setTimeout(() => {
+    //     instance.closeSession()
+    // }, 3200);
 
 </script>
 </body>
