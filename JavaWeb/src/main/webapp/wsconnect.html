@@ -26,7 +26,7 @@
                 console.warn(err);
             },
             connected: function (ws, ev) {
-                console.log(ev)
+                console.log(ws, ev)
             },
             message: function (data, ws, ev) {
                 console.log(data)
@@ -50,16 +50,20 @@
             return;
         }
 
+        let _this = this;
         let _ws = null;
         let _keepAlive = true;
         let _clientTimer = null;
         let _serverTimer = null;
+        _create();
 
         function _ping() {
             _clientTimer = setTimeout(() => {
-                _ws.send(heartbeat.ping);
+                if (_keepAlive && _ws.readyState === 1)
+                    _ws.send(heartbeat.ping);
                 _serverTimer = setTimeout(() => {
-                    _ws.close();
+                    if (_ws.readyState === 1)
+                        _ws.close();
                 }, heartbeat.delay * heartbeat.count)
             }, heartbeat.delay)
         }
@@ -87,7 +91,7 @@
             _ws.onclose = function (ev) {
                 callback.disconnect(ev);
                 if (_keepAlive) {
-                    _create();
+                    reconnect();
                 }
             };
             _ws.onerror = function (ev) {
@@ -95,20 +99,39 @@
             };
         }
 
+        function reconnect() {
+            if (_keepAlive) _create();
+        }
+
+        this.reOpen = function () {
+            _keepAlive = true;
+            reconnect();
+        }
+        this.send = function (data) {
+            if (_ws && _ws.readyState === 1) {
+                _ws.send(data);
+            }
+        }
         this.close = function () {
             if (_ws && _ws.readyState === 1) {
                 _ws.close();
-                _keepAlive = true;
+                _keepAlive = false;
             }
         };
-        _create();
     }
 
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
     let ws = new WsSession(wsUrl);
     setTimeout(() => {
         ws.close();
-    }, 5300)
+    }, 4700)
+
+    setTimeout(() => {
+        ws.reOpen();
+        setInterval(() => {
+            ws.send("ping")
+        }, 800);
+    }, 6000);
 
 </script>
 <!--<script>-->
