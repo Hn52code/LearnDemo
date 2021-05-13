@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS METHOD</title>
+</head>
+<body>
+本文将会使用代码为大家讲解 JS 中公有方法、私有方法、特权方法。
+
+1. 静态方法和属性
+静态方法即只允许父类调用，其他的实例均无法访问和调用的方法和属性。
+
+var user = function(age){
+// 变量 age 是 user 对象的私有属性
+var age = age;
+}
+
+// user.age 是 user 对象的静态方法
+user.age = function(){
+return this.age;
+}
+
+// 当我们将user对象实例化的时候, zhangsan 无法使用 user对象中的 age 方法
+// 实例中没有继承 user 对象的 age 方法
+var zhangsan = new user(18);
+2. 公共方法
+即 依此父类生成的所有实例均可以使用的方法
+
+var user = function(name, age){
+// 公共变量
+this.name = name;
+this.age = age;
+}
+
+user.prototype = {
+getInfo: function(){
+return "他的名字叫：" +this.name+ "，他的年龄是：" +this.age;
+}
+}
+
+// zhangsan 可以访问到name, age, getInfo
+var zhangsan = new user('张三', 18)
+3. 私有方法
+即只有父类可以访问的方法和属性，他和静态方法一致，只是表现形式不一样，构造器中的 var 变量和参数都是私有方法。
+
+var user = function(age){
+// age 是 user 对象的私有属性
+var age = age;
+
+// getAge 是 user 对象的私有方法
+function getAge() {
+return age;
+}
+}
+
+var zhangsan = new user(18);
+
+// 实例中不包含 user 对象的 age 属性和 getAge 方法
+zhangsan.age // undefined
+zhangsan.getAge // undefined
+4. 特权方法
+可以访问私有方法，并且在公共域中可见的方法称为特权方法。特权方法不可被修改，只能替换或者删除。
+
+
+var user = function(age){
+// age 是 user 对象的私有属性
+var age = age;
+
+// 创建一个特权方法用来获取 user 对象下的私有属性 age
+this.getInfo = function(){
+return age;
+}
+}
+
+var zhangsan = new user(18);
+zhangsan.getInfo() == 18
+
+<script>
+
+    function User() {
+        // 私有属性
+        let name = "zhn";
+        // 公共属性
+        this.age = 110;
+        // 通过将this赋值给私有变量，完成私有私有方法对共有属性的访问
+        let _this = this;
+
+        // 私有方法
+        function getName() {
+            console.log(name); // zhn
+            console.log(this.age); // undefined
+            console.log(_this.age);// 110
+        }
+
+        getName();
+
+        /* 公共方法 */
+        this.getAge = function () {
+            return this.age;
+        };
+
+        /* 特权方法 */
+        this.getName = function () {
+            return name;
+        }
+    }
+
+    // 公共属性
+    User.prototype.birth = new Date();
+
+    // 公共方法
+    User.prototype.getBirth = function () {
+        console.log(new Date());
+    };
+
+    /* 静态属性 */
+    User.desc = "描述";
+    /* 静态方法 */
+    User.toText = function () {
+    };
+
+    let user = new User();
+
+
+</script>
+</body>
+</html>

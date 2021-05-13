@@ -12,110 +12,207 @@
 
 <script>
 
-    /* 参考了 https://www.cnblogs.com/1wen/p/5808276.html */
 
-    // WebSocket 中readyState状态说明
-    // 0        CONNECTING        连接尚未建立
-    // 1        OPEN            WebSocket的链接已经建立
-    // 2        CLOSING            连接正在关闭
-    // 3        CLOSED            连接已经关闭或不可用
-
-    function WsSession(url, paras) {
-
-        if (typeof url !== "string") {
-            console.log(url);
+    function WsSession(url = "", obj = {
+        // 设置默认的心跳控制
+        heartbeat: {
+            delay: 1000,   // 默认延迟60s
+            ping: "ping",       // 该实例发送ping 表示服务端收到
+            pong: "pong",       // 该实例收到pong 表示服务端回复
+            count: 2            // 服务端延迟回复最大次数，该次数 * 延时，为判断服务回复心跳的最长时间否则客户端主动切断连接
+        },
+        callback: {
+            error: function (err) {
+                console.warn(err);
+            },
+            connected: function (ws, ev) {
+                console.log(ev)
+            },
+            message: function (data, ws, ev) {
+                console.log(data)
+            },
+            disconnect: function (ev) {
+                console.log(ev)
+            },
+        }
+    }) {
+        let {heartbeat, callback} = obj;
+        let _regExp = /ws[s]{0,1}:\/\/([\w.]+\/?)\S*/;
+        let _tips = {
+            notSupport: "该浏览器不支持websocket，请更换最新的浏览器！！！",
+            errUrl: "地址为空或者不是string类型",
+        };
+        if (!"WebSocket" in window) {
+            callback.error(_tips.notSupport);
+            return;
+        } else if (!_regExp.test(url)) {
+            callback.error(_tips.errUrl);
             return;
         }
-        // console.log(this); // this => window
-        /* 共有的，对象可调用 */
-        this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";
-        this.maxConnLimit = 10;
-        this.wsUrl = url;
-        /* 私有的，只能内部调用 */
+
         let _ws = null;
-        let _delay = null;
-        let _localTimer = null;
-        let _serverTimer = null;
-        let _connCount = 0;
         let _keepAlive = true;
+        let _clientTimer = null;
+        let _serverTimer = null;
 
         function _ping() {
-            if (!_keepAlive) return;
-            _delay = _delay === null ? 1000 : _delay;
-            _localTimer = setTimeout(() => {
-                // 查询发送时的readyState状态
-                // console.log('when ping ', _ws.readyState);
-                // 判断_ws是否处于连接状态，否则取消发送心跳检测
-                if (_ws.readyState !== 1) return;
-                _ws.send("ping");
+            _clientTimer = setTimeout(() => {
+                _ws.send(heartbeat.ping);
                 _serverTimer = setTimeout(() => {
                     _ws.close();
-                }, _delay * 2);
-            }, _delay);
+                }, heartbeat.delay * heartbeat.count)
+            }, heartbeat.delay)
         }
 
         function _reset() {
-            clearTimeout(_localTimer);
+            clearTimeout(_clientTimer);
             clearTimeout(_serverTimer);
-            _ping();
+            _ping()
         }
 
         function _create() {
-            _ws = new WebSocket(wsUrl);
-            // console.log(_ws);
-            _ws.onopen = (ev) => {
-                console.log('open connected', ev);
+            _ws = new WebSocket(url);
+            _ws.onopen = function (ev) {
                 _ping();
+                callback.connected(_ws, ev);
             };
-            _ws.onmessage = (ev) => {
-                console.log('message event', ev);
+            _ws.onmessage = function (ev) {
+                let data = ev.data;
                 _reset();
+                // if (data !== heartbeat.pong) {
+                //     callback.message(data, _ws, ev);
+                // }
+                callback.message(data, _ws, ev);
             };
-            _ws.onclose = (ev) => {
-                console.log('close event', ev);
-                if (_keepAlive) reconnect();
+            _ws.onclose = function (ev) {
+                callback.disconnect(ev);
+                if (_keepAlive) {
+                    _create();
+                }
             };
-            _ws.onerror = (ev) => {
-                console.log('error event', ev);
-                if (_keepAlive) reconnect();
+            _ws.onerror = function (ev) {
+                callback.error(ev);
             };
         }
 
-        function reconnect() {
-            let _this = this;
-            if (_connCount < _this.maxConnLimit) {
-                _create(wsUrl);
-                _connCount++;
-            }
-        }
-
-        this.closeSession = function () {
+        this.close = function () {
             if (_ws && _ws.readyState === 1) {
-                _keepAlive = false;
                 _ws.close();
+                _keepAlive = true;
             }
-            console.dir(_ws);
         };
-
-        if ("WebSocket" in window) {
-            _create.prototype = {};
-            return _create(url);
-        } else {
-            alert(this.warnText);
-            console.warn(this.warnText)
-        }
+        _create();
     }
 
-
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
-    // let instance = new WsSession(wsUrl);
-    // console.log(instance);
-    // console.log(instance.warnText);
-    // setTimeout(() => {
-    //     instance.closeSession()
-    // }, 3200);
-    new WsSession();
+    let ws = new WsSession(wsUrl);
+    setTimeout(() => {
+        ws.close();
+    }, 5300)
 
 </script>
+<!--<script>-->
+
+<!--/* 参考了 https://www.cnblogs.com/1wen/p/5808276.html */-->
+
+<!--// WebSocket 中readyState状态说明-->
+<!--// 0        CONNECTING        连接尚未建立-->
+<!--// 1        OPEN            WebSocket的链接已经建立-->
+<!--// 2        CLOSING            连接正在关闭-->
+<!--// 3        CLOSED            连接已经关闭或不可用-->
+
+<!--function WsSession(url, paras) {-->
+<!--// console.log(this); // this => window-->
+<!--/* 共有的，对象可调用 */-->
+<!--this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";-->
+<!--this.maxConnLimit = 10;-->
+<!--this.wsUrl = url;-->
+<!--/* 私有的，只能内部调用 */-->
+<!--let _ws = null;-->
+<!--let _delay = null;-->
+<!--let _localTimer = null;-->
+<!--let _serverTimer = null;-->
+<!--let _connCount = 0;-->
+<!--let _keepAlive = true;-->
+
+<!--function _ping() {-->
+<!--if (!_keepAlive) return;-->
+<!--_delay = _delay === null ? 1000 : _delay;-->
+<!--_localTimer = setTimeout(() => {-->
+<!--// 查询发送时的readyState状态-->
+<!--// console.log('when ping ', _ws.readyState);-->
+<!--// 判断_ws是否处于连接状态，否则取消发送心跳检测-->
+<!--if (_ws.readyState !== 1) return;-->
+<!--_ws.send("ping");-->
+<!--_serverTimer = setTimeout(() => {-->
+<!--_ws.close();-->
+<!--}, _delay * 2);-->
+<!--}, _delay);-->
+<!--}-->
+
+<!--function _reset() {-->
+<!--clearTimeout(_localTimer);-->
+<!--clearTimeout(_serverTimer);-->
+<!--_ping();-->
+<!--}-->
+
+<!--function _create() {-->
+<!--_ws = new WebSocket(wsUrl);-->
+<!--// console.log(_ws);-->
+<!--_ws.onopen = (ev) => {-->
+<!--console.log('open connected', ev);-->
+<!--_ping();-->
+<!--};-->
+<!--_ws.onmessage = (ev) => {-->
+<!--console.log('message event', ev);-->
+<!--_reset();-->
+<!--};-->
+<!--_ws.onclose = (ev) => {-->
+<!--console.log('close event', ev);-->
+<!--if (_keepAlive) reconnect();-->
+<!--};-->
+<!--_ws.onerror = (ev) => {-->
+<!--console.log('error event', ev);-->
+<!--if (_keepAlive) reconnect();-->
+<!--};-->
+<!--}-->
+
+<!--function reconnect() {-->
+<!--let _this = this;-->
+<!--if (_connCount < _this.maxConnLimit) {-->
+<!--_create(wsUrl);-->
+<!--_connCount++;-->
+<!--}-->
+<!--}-->
+
+<!--this.closeSession = function () {-->
+<!--if (_ws && _ws.readyState === 1) {-->
+<!--_keepAlive = false;-->
+<!--_ws.close();-->
+<!--}-->
+<!--console.dir(_ws);-->
+<!--};-->
+
+<!--if ("WebSocket" in window) {-->
+<!--_create.prototype = {};-->
+<!--return _create(url);-->
+<!--} else {-->
+<!--alert(this.warnText);-->
+<!--console.warn(this.warnText)-->
+<!--}-->
+<!--}-->
+
+
+<!--let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";-->
+<!--// let instance = new WsSession(wsUrl);-->
+<!--// console.log(instance);-->
+<!--// console.log(instance.warnText);-->
+<!--// setTimeout(() => {-->
+<!--//     instance.closeSession()-->
+<!--// }, 3200);-->
+<!--new WsSession();-->
+
+
+<!--</script>-->
 </body>
 </html>

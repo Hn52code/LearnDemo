@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS 继承</title>
+</head>
+<body>
+
+<script>
+
+    /* 父类 */
+    function User(name) {
+        this.name = name;
+    }
+
+    User.prototype.getName = function () {
+        return this.name;
+    };
+
+    let user = new User("zhn");
+    console.log(user.getName());
+
+    /* 方式1-原型链继承 无法传参到父类 */
+    // function Admin() {
+    // }
+    //
+    // Admin.prototype = new User();
+    //
+    // let admin = new Admin();
+    // admin.name = "zhn";
+    // console.log(admin.name);
+    // console.log(admin.getName());
+
+    /* 方式2-函数继承 无法复用父类方法 */
+    // function Admin(name) {
+    //     User.call(this,name);
+    // }
+    //
+    // let admin = new Admin("he");
+    // admin.name = "zhn";
+    // console.log(admin.name);            // zhn
+    // console.log(admin.getName());       // 报错
+
+    /* 方式3 组合原型链和函数构造 出现两次调用父类构造方法 */
+    // function Admin(name) {
+    //     User.call(this, name);
+    // }
+    // Admin.prototype = new User();
+    //
+    // let admin = new Admin("he");
+    // console.log(admin.name);            // he
+    // console.log(admin.getName());       // he
+
+    /* 方式4 原型式继承，相当于复制一个对象，
+        1、所有实例都会继承原型上的属性。
+        2、无法实现复用。（新实例属性都是后面添加的） */
+    // 解释Object.create()实现方式
+    // function createObj(obj) {
+    //     function F() {
+    //     }
+    //
+    //     F.prototype = obj;
+    //     return new F();
+    // }
+    //
+    // let admin = Object.create(new User("zhn"));
+    // console.log(admin.name);
+    // console.log(admin.getName());
+    // let admin2 = createObj(new User("zhangsan"));
+    // console.log(admin2.name);
+    // console.log(admin2.getName());
+
+    /* 方式5 寄生式继承 相当于原型链包装 */
+    // function Admin(name, age) {
+    //     let user = Object.create(new User(name));
+    //     user.age = age;
+    //     user.getAge = function () {
+    //         return this.age;
+    //     };
+    //     return user;
+    // }
+    //
+    // let admin = new Admin("zhn", 10);
+    //
+    // console.log(admin.getName());
+    // console.log(admin.getAge());
+
+    /* 方式6 原型和寄生合并 */
+    function Admin(name, age) {
+        User.call(this, name);
+        this.age = age;
+        this.getAge = function () {
+            return this.age;
+        }
+    }
+
+    // let proto = Object.create(User.prototype);
+    // proto.constructor = Admin;
+    // Admin.prototype = proto;
+
+    function extend(child, parent) {
+        let proto = Object.create(parent.prototype);
+        proto.constructor = child;
+        child.prototype = proto;
+    }
+
+    extend(Admin, User);
+    let admin = new Admin("lisi", 10);
+
+    console.log(admin.getName());
+    console.log(admin.getAge());
+
+
+    /* es6 */
+    class Person {
+        constructor(){}
+        show(){
+            console.log("Person...")
+        }
+    }
+
+    class Student extends  Person{
+        constructor(){
+            super();
+        }
+    }
+
+    let student = new Student();
+
+    student.show();
+
+</script>
+</body>
+</html>

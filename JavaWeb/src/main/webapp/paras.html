@@ -86,6 +86,10 @@ js中==和===区别
     // 判断obj是否包含名为getName的函数
     console.log(obj.hasOwnProperty("getName") && typeof obj.getName === "function"); //true
 
+    let user = null;
+    console.warn(user !== null && "name" in user); // false  --> 有警告
+    console.warn(user !== null ? ("name" in user) : false); // false  --> 有警告
+
 </script>
 </body>
 </html>
