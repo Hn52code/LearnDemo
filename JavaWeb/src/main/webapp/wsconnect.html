@@ -12,6 +12,11 @@
 <input type="button" value="断开" onclick="ws.close()"/>
 
 <script>
+
+    // 1.可创建连接对象
+    // 2.包含心跳检测，可设置心跳规则
+    // 3.可主动切断，连接和重连
+    // 4.可设置连接，消息，断开，错误，提示等事件回调
     // {
     //     url = "",
     //         // 设置默认的心跳控制
@@ -23,6 +28,7 @@
     //         message = function(){},
     //         disconnect = function(){},
     //         error = function(){},
+    //         operate = function(){},
     // } = {}
 
     function WsSession({url, delay = 1000, ping = "ping", pong = "pong", count = 2, connected, message, disconnect, error, operate} = {}) {
@@ -93,16 +99,12 @@
             _ws.onmessage = function (ev) {
                 let data = ev.data;
                 _reset();
-                // if (data !== heartbeat.pong) {
-                //     message(data, _ws, ev);
-                // }
-                _this.message(data, _ws, ev);
+                if (data !== pong)
+                    _this.message(data, _ws, ev);
             };
             _ws.onclose = function (ev) {
                 _this.disconnect(ev);
-                if (_keepAlive) {
-                    _create();
-                }
+                if (_keepAlive) _create();
             };
             _ws.onerror = function (ev) {
                 _this.error(ev);
@@ -161,108 +163,5 @@
     // }, 6000);
 
 </script>
-<!--<script>-->
-
-<!--/* 参考了 https://www.cnblogs.com/1wen/p/5808276.html */-->
-
-<!--// WebSocket 中readyState状态说明-->
-<!--// 0        CONNECTING        连接尚未建立-->
-<!--// 1        OPEN            WebSocket的链接已经建立-->
-<!--// 2        CLOSING            连接正在关闭-->
-<!--// 3        CLOSED            连接已经关闭或不可用-->
-
-<!--function WsSession(url, paras) {-->
-<!--// console.log(this); // this => window-->
-<!--/* 共有的，对象可调用 */-->
-<!--this.warnText = "该浏览器不支持websocket，请更换最新的浏览器！！！";-->
-<!--this.maxConnLimit = 10;-->
-<!--this.wsUrl = url;-->
-<!--/* 私有的，只能内部调用 */-->
-<!--let _ws = null;-->
-<!--let _delay = null;-->
-<!--let _localTimer = null;-->
-<!--let _serverTimer = null;-->
-<!--let _connCount = 0;-->
-<!--let _keepAlive = true;-->
-
-<!--function _ping() {-->
-<!--if (!_keepAlive) return;-->
-<!--_delay = _delay === null ? 1000 : _delay;-->
-<!--_localTimer = setTimeout(() => {-->
-<!--// 查询发送时的readyState状态-->
-<!--// console.log('when ping ', _ws.readyState);-->
-<!--// 判断_ws是否处于连接状态，否则取消发送心跳检测-->
-<!--if (_ws.readyState !== 1) return;-->
-<!--_ws.send("ping");-->
-<!--_serverTimer = setTimeout(() => {-->
-<!--_ws.close();-->
-<!--}, _delay * 2);-->
-<!--}, _delay);-->
-<!--}-->
-
-<!--function _reset() {-->
-<!--clearTimeout(_localTimer);-->
-<!--clearTimeout(_serverTimer);-->
-<!--_ping();-->
-<!--}-->
-
-<!--function _create() {-->
-<!--_ws = new WebSocket(wsUrl);-->
-<!--// console.log(_ws);-->
-<!--_ws.onopen = (ev) => {-->
-<!--console.log('open connected', ev);-->
-<!--_ping();-->
-<!--};-->
-<!--_ws.onmessage = (ev) => {-->
-<!--console.log('message event', ev);-->
-<!--_reset();-->
-<!--};-->
-<!--_ws.onclose = (ev) => {-->
-<!--console.log('close event', ev);-->
-<!--if (_keepAlive) reconnect();-->
-<!--};-->
-<!--_ws.onerror = (ev) => {-->
-<!--console.log('error event', ev);-->
-<!--if (_keepAlive) reconnect();-->
-<!--};-->
-<!--}-->
-
-<!--function reconnect() {-->
-<!--let _this = this;-->
-<!--if (_connCount < _this.maxConnLimit) {-->
-<!--_create(wsUrl);-->
-<!--_connCount++;-->
-<!--}-->
-<!--}-->
-
-<!--this.closeSession = function () {-->
-<!--if (_ws && _ws.readyState === 1) {-->
-<!--_keepAlive = false;-->
-<!--_ws.close();-->
-<!--}-->
-<!--console.dir(_ws);-->
-<!--};-->
-
-<!--if ("WebSocket" in window) {-->
-<!--_create.prototype = {};-->
-<!--return _create(url);-->
-<!--} else {-->
-<!--alert(this.warnText);-->
-<!--console.warn(this.warnText)-->
-<!--}-->
-<!--}-->
-
-
-<!--let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";-->
-<!--// let instance = new WsSession(wsUrl);-->
-<!--// console.log(instance);-->
-<!--// console.log(instance.warnText);-->
-<!--// setTimeout(() => {-->
-<!--//     instance.closeSession()-->
-<!--// }, 3200);-->
-<!--new WsSession();-->
-
-
-<!--</script>-->
 </body>
 </html>
