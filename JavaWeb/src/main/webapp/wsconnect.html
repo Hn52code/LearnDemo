@@ -7,131 +7,158 @@
 </head>
 <body>
 
-<input type="button" value="连接" onclick=""/>
-<input type="button" value="断开" onclick=""/>
+<input type="button" value="连接" onclick="ws.open()"/>
+<input type="button" value="重连" onclick="ws.reopen()"/>
+<input type="button" value="断开" onclick="ws.close()"/>
 
 <script>
+    // {
+    //     url = "",
+    //         // 设置默认的心跳控制
+    //         delay = 1000,        // 默认延迟60s
+    //         ping = "ping",       // 该实例发送ping 表示服务端收到
+    //         pong = "pong",       // 该实例收到pong 表示服务端回复
+    //         count = 2,           // 服务端延迟回复最大次数，该次数 * 延时，为判断服务回复心跳的最长时间否则客户端主动切断连接
+    //         connected = function(){},    // 默认值回调函数
+    //         message = function(){},
+    //         disconnect = function(){},
+    //         error = function(){},
+    // } = {}
 
-
-    function WsSession(url = "", obj = {
-        // 设置默认的心跳控制
-        heartbeat: {
-            delay: 1000,   // 默认延迟60s
-            ping: "ping",       // 该实例发送ping 表示服务端收到
-            pong: "pong",       // 该实例收到pong 表示服务端回复
-            count: 2            // 服务端延迟回复最大次数，该次数 * 延时，为判断服务回复心跳的最长时间否则客户端主动切断连接
-        },
-        callback: {
-            error: function (err) {
-                console.warn(err);
-            },
-            connected: function (ws, ev) {
-                console.log(ws, ev)
-            },
-            message: function (data, ws, ev) {
-                console.log(data)
-            },
-            disconnect: function (ev) {
-                console.log(ev)
-            },
-        }
-    }) {
-        let {heartbeat, callback} = obj;
-        let _regExp = /ws[s]{0,1}:\/\/([\w.]+\/?)\S*/;
+    function WsSession({url, delay = 1000, ping = "ping", pong = "pong", count = 2, connected, message, disconnect, error, operate} = {}) {
+        let _regExp = /ws[s]?:\/\/([\w.]+\/?)\S*/;
         let _tips = {
-            notSupport: "该浏览器不支持websocket，请更换最新的浏览器！！！",
-            errUrl: "地址为空或者不是string类型",
+            connected: "已经建立连接！",
+            disconnected: "已经断开连接！",
+            notSupport: "该浏览器不支持WebSocket，请更换最新的浏览器！！！",
+            errUrl: "地址为空或者不符合ws连接表达式",
         };
-        if (!"WebSocket" in window) {
-            callback.error(_tips.notSupport);
-            return;
-        } else if (!_regExp.test(url)) {
-            callback.error(_tips.errUrl);
-            return;
-        }
+
+        this.connected = connected || function (ws, ev) {
+            console.info("建立连接");
+        };
+        this.message = message || function (data, ws, ev) {
+            console.info("消息: ", data);
+        };
+        this.disconnect = disconnect || function (ws, ev) {
+            console.info("断开连接");
+        };
+        this.error = error || function (err) {
+            console.warn(err);
+        };
+        this.operate = operate || function (obj) {
+            console.info(obj)
+        };
 
         let _this = this;
+
+        if (!"WebSocket" in window) {
+            _this.error(_tips.notSupport);
+            return;
+        } else if (!_regExp.test(url)) {
+            _this.error(_tips.errUrl);
+            return;
+        }
+
         let _ws = null;
-        let _keepAlive = true;
+        let _keepAlive = null;
         let _clientTimer = null;
         let _serverTimer = null;
+
         _create();
 
         function _ping() {
             _clientTimer = setTimeout(() => {
                 if (_keepAlive && _ws.readyState === 1)
-                    _ws.send(heartbeat.ping);
+                    _ws.send(ping);
                 _serverTimer = setTimeout(() => {
                     if (_ws.readyState === 1)
                         _ws.close();
-                }, heartbeat.delay * heartbeat.count)
-            }, heartbeat.delay)
+                }, delay * count)
+            }, delay)
         }
 
         function _reset() {
             clearTimeout(_clientTimer);
             clearTimeout(_serverTimer);
-            _ping()
+            _ping();
         }
 
         function _create() {
             _ws = new WebSocket(url);
             _ws.onopen = function (ev) {
                 _ping();
-                callback.connected(_ws, ev);
+                _this.connected(_ws, ev);
             };
             _ws.onmessage = function (ev) {
                 let data = ev.data;
                 _reset();
                 // if (data !== heartbeat.pong) {
-                //     callback.message(data, _ws, ev);
+                //     message(data, _ws, ev);
                 // }
-                callback.message(data, _ws, ev);
+                _this.message(data, _ws, ev);
             };
             _ws.onclose = function (ev) {
-                callback.disconnect(ev);
+                _this.disconnect(ev);
                 if (_keepAlive) {
-                    reconnect();
+                    _create();
                 }
             };
             _ws.onerror = function (ev) {
-                callback.error(ev);
+                _this.error(ev);
             };
-        }
-
-        function reconnect() {
-            if (_keepAlive) _create();
-        }
-
-        this.reOpen = function () {
             _keepAlive = true;
-            reconnect();
         }
+
+        this.open = function () {
+            if (_keepAlive) {
+                this.operate(_tips.connected);
+                return;
+            }
+            if (_clientTimer) clearTimeout(_clientTimer);
+            if (_serverTimer) clearTimeout(_serverTimer);
+            _create();
+        };
+        this.reopen = function () {
+            this.close();
+            setTimeout(() => {
+                this.open();
+            }, 1000);
+        };
+        this.close = function () {
+            if (!_keepAlive) {
+                this.operate(_tips.disconnected);
+                return;
+            }
+            if (_ws && _ws.readyState === 1) {
+                _keepAlive = false;
+                _ws.close();
+            }
+        };
         this.send = function (data) {
             if (_ws && _ws.readyState === 1) {
                 _ws.send(data);
-            }
-        }
-        this.close = function () {
-            if (_ws && _ws.readyState === 1) {
-                _ws.close();
-                _keepAlive = false;
             }
         };
     }
 
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
-    let ws = new WsSession(wsUrl);
-    setTimeout(() => {
-        ws.close();
-    }, 4700)
-
-    setTimeout(() => {
-        ws.reOpen();
-        setInterval(() => {
-            ws.send("ping")
-        }, 800);
-    }, 6000);
+    let ws = new WsSession({
+        url: wsUrl,
+        delay: 1000,
+        ping: "ping",
+        pong: "pong",
+        count: 2
+    });
+    // setTimeout(() => {
+    //     ws.close();
+    // }, 4700);
+    // setTimeout(() => {
+    //     ws.reopen();
+    //     setInterval(() => {
+    //         ws.send("ping")
+    //     }, 800);
+    // }, 6000);
 
 </script>
 <!--<script>-->
