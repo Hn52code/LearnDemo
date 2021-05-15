@@ -6,40 +6,31 @@
 </head>
 <body>
 
-<input type="button" value="连接" onclick="createConnection()"/>
-<input type="button" value="断开" onclick="closeConnection()"/>
+<input type="button" value="连接"/>
+<input type="button" value="断开"/>
 <script>
 
     /* https://www.cnblogs.com/1wen/p/5808276.html */
 
     let ws = null;
     let wsUrl = "ws://" + window.location.host + "/chat.ws";
-    let wsReconnectDelayTime = 2000;
 
-    function createConnection() {
-        if ("WebSocket" in window) {
-            ws = new WebSocket(wsUrl);
+    if ("WebSocket" in window) {
+        ws = new WebSocket(wsUrl);
 
-            ws.onopen = (ev) => {
-                console.log('open connected')
-            };
-            ws.onmessage = (ev) => {
-                console.log('message event')
-            };
-            ws.onclose = (ev) => {
-                console.log('close event');
-                setTimeout(() => {
-                    createConnection();
-                }, wsReconnectDelayTime)
-            };
-            ws.onerror = (ev) => {
-                console.log('error event')
-            };
-        }
-    }
-
-    function closeConnection() {
-        if (ws) ws.close();
+        ws.onopen = (ev) => {
+            console.log('open connected');
+            ws.send("ping")
+        };
+        ws.onmessage = (ev) => {
+            console.log('message event')
+        };
+        ws.onclose = (ev) => {
+            console.log('close event');
+        };
+        ws.onerror = (ev) => {
+            console.log('error event')
+        };
     }
 
 </script>

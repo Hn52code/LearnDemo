@@ -4,11 +4,11 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint(value = "/chat.ws")
-public class WsAuthChat {
+public class WsChat {
 
     @OnOpen
     public void onOpen(Session session) {
-        System.out.println("[网页服务端监听]：新增一个连接，id：" + session.getId() + " 目前连接总数：");
+        System.out.println("[网页服务端监听]：新增一个连接，id：" + session.getId());
     }
 
     @OnMessage
@@ -20,7 +20,7 @@ public class WsAuthChat {
     @OnClose
     public void onClose(Session session) {
 
-        System.out.println("[网页服务端监听]：用户ID: " + session.getId() + " 离线，目前在线人数：");
+        System.out.println("[网页服务端监听]：用户ID: " + session.getId() + " 离线");
     }
 
     @OnError

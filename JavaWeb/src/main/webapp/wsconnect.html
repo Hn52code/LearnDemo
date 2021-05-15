@@ -7,9 +7,9 @@
 </head>
 <body>
 
-<input type="button" value="连接" onclick="ws.open()"/>
-<input type="button" value="重连" onclick="ws.reopen()"/>
-<input type="button" value="断开" onclick="ws.close()"/>
+<!--<input type="button" value="连接" onclick="ws.open()"/>-->
+<!--<input type="button" value="重连" onclick="ws.reopen()"/>-->
+<!--<input type="button" value="断开" onclick="ws.close()"/>-->
 
 <script>
 
@@ -46,14 +46,13 @@
         this.message = message || function (data, ws, ev) {
             console.info("消息: ", data);
         };
-        this.disconnect = disconnect || function (ws, ev) {
-            console.info("断开连接");
+        this.disconnect = disconnect || function (ev) {
+            console.info("断开连接", ev);
         };
         this.error = error || function (err) {
-            console.warn(err);
         };
         this.operate = operate || function (obj) {
-            console.info(obj)
+            console.info(obj);
         };
 
         let _this = this;
@@ -107,6 +106,7 @@
                 if (_keepAlive) _create();
             };
             _ws.onerror = function (ev) {
+                console.error(ev);
                 _this.error(ev);
             };
             _keepAlive = true;
@@ -145,13 +145,17 @@
     }
 
     let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
-    let ws = new WsSession({
-        url: wsUrl,
-        delay: 1000,
-        ping: "ping",
-        pong: "pong",
-        count: 2
-    });
+
+    for (let i = 0; i < 201; i++) {
+        let wsArr = [];
+        wsArr.push(new WsSession({
+            url: wsUrl,
+            delay: 60 * 1000,
+            ping: "ping",
+            pong: "pong",
+            count: 2
+        }))
+    }
     // setTimeout(() => {
     //     ws.close();
     // }, 4700);
