@@ -25,6 +25,7 @@
         <module>socketio</module>
         <module>changeprofile</module>
         <module>crawler</module>
+        <module>myiot</module>
     </modules>
 
     <properties>
