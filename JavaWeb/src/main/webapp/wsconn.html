@@ -6,10 +6,10 @@
     <title>web chat</title>
 </head>
 <body>
-
-<!--<input type="button" value="连接" onclick="ws.open()"/>-->
-<!--<input type="button" value="重连" onclick="ws.reopen()"/>-->
-<!--<input type="button" value="断开" onclick="ws.close()"/>-->
+<input type="button" value="连接" onclick="wsSession.open()"/>
+<input type="button" value="重连" onclick="wsSession.reopen()"/>
+<input type="button" value="断开" onclick="wsSession.close()"/>
+<input type="button" value="在线" onclick="console.info(wsSession.online());"/>
 
 <script>
 
@@ -31,7 +31,7 @@
     //         operate = function(){},
     // } = {}
 
-    function WsSession({url, delay = 1000, ping = "ping", pong = "pong", count = 2, connected, message, disconnect, error, operate} = {}) {
+    function WsSession({url, delay = 1000, ping = "ping", count = 2, connected, message, disconnect, error} = {}) {
         let _regExp = /ws[s]?:\/\/([\w.]+\/?)\S*/;
         let _tips = {
             connected: "已经建立连接！",
@@ -51,7 +51,7 @@
         };
         this.error = error || function (err) {
         };
-        this.operate = operate || function (obj) {
+        this.operate = function (obj) {
             console.info(obj);
         };
 
@@ -92,16 +92,18 @@
         function _create() {
             _ws = new WebSocket(url);
             _ws.onopen = function (ev) {
+                _this.connected(_this, ev);
                 _ping();
-                _this.connected(_ws, ev);
+                _this.operate(_tips.connected);
             };
             _ws.onmessage = function (ev) {
-                let data = ev.data;
                 _reset();
-                if (data !== pong)
-                    _this.message(data, _ws, ev);
+                let data = ev.data;
+                if (data !== ping)
+                    _this.message(data, _this, ev);
             };
             _ws.onclose = function (ev) {
+                _this.operate(_tips.disconnected);
                 _this.disconnect(ev);
                 if (_keepAlive) _create();
             };
@@ -137,6 +139,9 @@
                 _ws.close();
             }
         };
+        this.online = function () {
+            return _keepAlive && _ws.readyState === 1;
+        };
         this.send = function (data) {
             if (_ws && _ws.readyState === 1) {
                 _ws.send(data);
@@ -144,7 +149,7 @@
         };
     }
 
-    let wsUrl = "ws://" + window.location.host + "/wsconnect.ws";
+    let wsUrl = "ws://" + window.location.host + "/conn.ws";
 
     for (let i = 0; i < 201; i++) {
         let wsArr = [];
@@ -152,7 +157,6 @@
             url: wsUrl,
             delay: 60 * 1000,
             ping: "ping",
-            pong: "pong",
             count: 2
         }))
     }

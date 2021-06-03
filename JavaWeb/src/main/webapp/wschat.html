@@ -1,37 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>web chat</title>
 </head>
 <body>
+<input type="button" value="连接" onclick="wsSession.open()"/>
+<input type="button" value="重连" onclick="wsSession.reopen()"/>
+<input type="button" value="断开" onclick="wsSession.close()"/>
+<input type="button" value="在线" onclick="console.info(wsSession.online());"/>
+<hr>
+<input type="button" value="创建群" onclick=""/>
 
-<input type="button" value="连接"/>
-<input type="button" value="断开"/>
 <script>
-
-    /* https://www.cnblogs.com/1wen/p/5808276.html */
-
-    let ws = null;
-    let wsUrl = "ws://" + window.location.host + "/chat.ws";
-
-    if ("WebSocket" in window) {
-        ws = new WebSocket(wsUrl);
-
-        ws.onopen = (ev) => {
-            console.log('open connected');
-            ws.send("ping")
+    function WsSession({url, delay = 1000, ping = "ping", count = 2, connected, message, disconnect, error} = {}) {
+        let _regExp = /ws[s]?:\/\/([\w.]+\/?)\S*/;
+        let _tips = {
+            connected: "已经建立连接！",
+            disconnected: "已经断开连接！",
+            notSupport: "该浏览器不支持WebSocket，请更换最新的浏览器！！！",
+            errUrl: "地址为空或者不符合ws连接表达式",
         };
-        ws.onmessage = (ev) => {
-            console.log('message event')
+
+        this.connected = connected || function (ws, ev) {
         };
-        ws.onclose = (ev) => {
-            console.log('close event');
+        this.message = message || function (data, ws, ev) {
         };
-        ws.onerror = (ev) => {
-            console.log('error event')
+        this.disconnect = disconnect || function (ev) {
+        };
+        this.error = error || function (err) {
+        };
+        this.operate = function (obj) {
+            console.info(obj);
+        };
+
+        let _this = this;
+
+        if (!"WebSocket" in window) {
+            _this.error(_tips.notSupport);
+            return;
+        } else if (!_regExp.test(url)) {
+            _this.error(_tips.errUrl);
+            return;
+        }
+
+        let _ws = null;
+        let _keepAlive = null;
+        let _clientTimer = null;
+        let _serverTimer = null;
+
+        _create();
+
+        function _ping() {
+            _clientTimer = setTimeout(() => {
+                if (_keepAlive && _ws.readyState === 1)
+                    _ws.send(ping);
+                _serverTimer = setTimeout(() => {
+                    if (_ws.readyState === 1)
+                        _ws.close();
+                }, delay * count)
+            }, delay)
+        }
+
+        function _reset() {
+            clearTimeout(_clientTimer);
+            clearTimeout(_serverTimer);
+            _ping();
+        }
+
+        function _create() {
+            _ws = new WebSocket(url);
+            _ws.onopen = function (ev) {
+                _this.connected(_this, ev);
+                _ping();
+                _this.operate(_tips.connected);
+            };
+            _ws.onmessage = function (ev) {
+                _reset();
+                let data = ev.data;
+                if (data !== ping)
+                    _this.message(data, _this, ev);
+            };
+            _ws.onclose = function (ev) {
+                _this.operate(_tips.disconnected);
+                _this.disconnect(ev);
+                if (_keepAlive) _create();
+            };
+            _ws.onerror = function (ev) {
+                console.error(ev);
+                _this.error(ev);
+            };
+            _keepAlive = true;
+        }
+
+        this.open = function () {
+            if (_keepAlive) {
+                this.operate(_tips.connected);
+                return;
+            }
+            if (_clientTimer) clearTimeout(_clientTimer);
+            if (_serverTimer) clearTimeout(_serverTimer);
+            _create();
+        };
+        this.reopen = function () {
+            this.close();
+            setTimeout(() => {
+                this.open();
+            }, 1000);
+        };
+        this.close = function () {
+            if (!_keepAlive) {
+                this.operate(_tips.disconnected);
+                return;
+            }
+            if (_ws && _ws.readyState === 1) {
+                _keepAlive = false;
+                _ws.close();
+            }
+        };
+        this.online = function () {
+            return _keepAlive && _ws.readyState === 1;
+        };
+        this.send = function (data) {
+            if (_ws && _ws.readyState === 1) {
+                _ws.send(data);
+            }
         };
     }
+</script>
+<script>
+
+    let wsUrl = "ws://" + window.location.host + "/chat.ws";
+
+    let wsSession = new WsSession({
+        url: wsUrl,
+        delay: 60 * 1000 * 10,
+        ping: "ping",
+        count: 2,
+        connected: function (ws, ev) {
+            ws.send("auth");
+        },
+        message: function (data, ws, ev) {
+
+        },
+        disconnect: function (ev) {
+
+        }
+    });
+
+    /* 群操作 */
+
+    function createGroup() {
+
+    }
+
+    function joinGroup(groupId) {
+
+    }
+
+    function quitGroup(groupId) {
+
+    }
+
 
 </script>
 </body>
