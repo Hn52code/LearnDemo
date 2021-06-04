@@ -14,11 +14,11 @@ public class SmsTest {
     @Test
     public void testSms() {
         Sms sms = new Sms();
-        System.out.println(sms.sendSmsOnIDVerity("4875", "18888888888"));
+//        System.out.println(sms.sendSmsOnIDVerity("4875", "18888888888"));
 //        System.out.println(sms.sendSmsOnInfo("4875", "18888888888"));
 //        System.out.println(sms.sendSmsOnLogin("4875", "18888888888"));
 //        System.out.println(sms.sendSmsOnLoginErr("4875", "18888888888"));
-//        System.out.println(sms.sendSmsOnRegister("4875", "18888888888"));
+//        System.out.println(sms.sendSmsOnRegister("4875", "18774220168"));
 //        System.out.println(sms.sendSmsOnPassword("4875", "18888888888"));
 //        List<String> list = new ArrayList<>();
 //        list.add("18888888888");
