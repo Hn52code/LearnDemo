@@ -1,22 +1,39 @@
 package com.zhn.demo.baseweb.servlet.chat;
 
 import javax.websocket.Session;
-import java.util.UUID;
+import java.util.*;
 
 public class User {
 
-    private UUID id;
+    /* 用户名 */
     private String name;
+    /* 用户通讯session */
     private Session session;
+    /* 用户所有群集合 */
+    private Set<Group> groups;
 
     public User(String name, Session session) {
-        this.id = UUID.randomUUID();
         this.name = name;
         this.session = session;
+        this.groups = new HashSet<>();
     }
 
-    public UUID getId() {
-        return id;
+    /* 加入群 */
+    public void join(Group group) {
+        groups.add(group);
+    }
+
+    /* 退出群 */
+    public void exit(Group group) {
+        groups.remove(group);
+    }
+
+    /* 退出所有群 */
+    public void clearGroup() {
+        if (groups.isEmpty()) return;
+        for (Group group : groups) {
+            group.exit(this);
+        }
     }
 
     public String getName() {
@@ -27,20 +44,26 @@ public class User {
         return session;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof User)) return false;
-        User user = (User) obj;
-        return user.session.equals(this.session) && user.id.equals(id) && user.name.equals(this.name);
+    public Set<Group> getGroups() {
+        return groups;
     }
 
-    @Override
-    public int hashCode() {
-        int result = this.session.hashCode();
-        result = result * 13 + this.id.hashCode();
-        result = result * 13 + this.name.hashCode();
-        return result;
+    public int getCount() {
+        return groups.size();
     }
 
+//    @Override
+//    public boolean equals(Object object) {
+//        if (this == object) return true;
+//        if (!(object instanceof User)) return false;
+//        User user = (User) object;
+//        return Objects.equals(getName(), user.getName()) &&
+//                Objects.equals(getSession(), user.getSession());
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(getName(), getSession());
+//    }
 
 }
