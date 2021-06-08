@@ -1,6 +1,5 @@
 package com.zhn.demo.redis.cache.spring;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -12,25 +11,24 @@ public class Application {
     public static void main(String[] args) throws InterruptedException {
         // 配置方式
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-        for (int i = 0; i < 500; i++) {
+
+        for (int i = 0; i < 800; i++) {
             new Thread(() -> {
-                while (true) {
-                    RedisTemplate redisTemplate = context.getBean(RedisTemplate.class);
-                    UUID uuid = UUID.randomUUID();
-                    System.out.println(uuid);
-                    int time = (int)((Math.random() * 49)+1);
-                    redisTemplate.opsForValue().set(uuid.toString(), "jbqjwebwqn", time, TimeUnit.SECONDS);
-                    Object value = redisTemplate.opsForValue().get(uuid.toString());
-                    System.out.println(uuid);
+                RedisTemplate redisTemplate = context.getBean(RedisTemplate.class);
+                UUID uuid = UUID.randomUUID();
+                System.out.println(uuid);
+                int time = (int) ((Math.random() * 49) + 1);
+                redisTemplate.opsForValue().set(uuid.toString(), "jbqjwebwqn", time, TimeUnit.SECONDS);
+                Object value = redisTemplate.opsForValue().get(uuid.toString());
+                System.out.print(uuid);
 
-                    try {
-                        Thread.sleep((long) ((Math.random() * 99)+1) * 1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep((long) ((Math.random() * 99) + 1) * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
             }).start();
+            System.out.println("   ->" + (i + 1));
         }
 
         while (true) Thread.sleep(10000);
