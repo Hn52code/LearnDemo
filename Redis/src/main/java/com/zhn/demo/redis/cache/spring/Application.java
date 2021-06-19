@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 public class Application {
 
     public static void main(String[] args) throws InterruptedException {
+        // 连接释放 参考：https://www.cnblogs.com/a393060727/p/5281950.html
+
         // 配置方式
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
 

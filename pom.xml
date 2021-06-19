@@ -26,6 +26,7 @@
         <module>changeprofile</module>
         <module>crawler</module>
         <module>myiot</module>
+        <module>aepdemo</module>
     </modules>
 
     <properties>
