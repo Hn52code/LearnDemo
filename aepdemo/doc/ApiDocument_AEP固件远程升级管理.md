@@ -738,7 +738,7 @@ json
 			"deviceSn": "",
 			"imei": "122344584512546",
 			"productName": "复用lw二进制 远程升级",
-			"updateTime": "",
+			"reqTime": "",
 			"taskState": "0",
 			"resultCode": "-1",
 			"finishTime": "",

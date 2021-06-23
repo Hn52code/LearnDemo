@@ -14,7 +14,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class RPCServer {
 
-    private static final String RPC_QUEUE_NAME = "rpc_queue";
+    private static final String RPC_QUEUE_NAME = "rpc.queue";
 
     private static int fib(int n) {
         if (n == 0) return 0;

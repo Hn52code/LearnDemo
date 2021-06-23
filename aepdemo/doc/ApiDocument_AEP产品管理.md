@@ -67,7 +67,7 @@ json
     "authType": 1,
     "payloadFormat": 1,
     "createTime": 1571402267678,
-    "updateTime": 1571402268678,
+    "reqTime": 1571402268678,
     "networkType": 4,
     "endpointFormat": 1,
     "powerModel": 1,
@@ -165,7 +165,7 @@ json
                 "thirdTypeValue": "测试tanglv",
                 "tupIsThrough": 1,
                 "updateBy": "user",
-                "updateTime": 1535943389000
+                "reqTime": 1535943389000
             }
         ],
         "pageNum": 1,
@@ -348,7 +348,7 @@ json
     "authType": 1,
     "payloadFormat": 1,
     "createTime": 1571402267678,
-    "updateTime": 1571402268678,
+    "reqTime": 1571402268678,
     "networkType": 4,
     "endpointFormat": 1,
     "powerModel": 1,

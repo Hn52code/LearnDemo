@@ -196,7 +196,7 @@ default
     "firmwareVersion": "",//string，版本信息
     "deviceStatus": 2,//Integer，设备状态 0:已注册，1：已激活，2：已注销
     "createTime": 1555557239000,//Timestamp，创建时间
-    "updateTime": 1555557274000,//Timestamp，修改时间
+    "reqTime": 1555557274000,//Timestamp，修改时间
     "activeTime": 1555557243000,//Timestamp，激活时间
     "logoutTime": 1555557274000,//Timestamp，注销时间
     "netStatus": 2,//设备在线状态
@@ -268,7 +268,7 @@ default
        "firmwareVersion": "",//string，版本信息
        "deviceStatus": 2,//Integer，设备状态 0:已注册，1：已激活，2：已注销
        "createTime": 1555557239000,//Timestamp，创建时间
-       "updateTime": 1555557274000,//Timestamp，修改时间
+       "reqTime": 1555557274000,//Timestamp，修改时间
        "activeTime": 1555557243000,//Timestamp，激活时间
        "logoutTime": 1555557274000,//Timestamp，注销时间
        "netStatus": 2,//设备在线状态

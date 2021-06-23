@@ -1,4 +1,4 @@
-package com.zhn.demo.rabbitmq.mq4javabean;
+package com.zhn.demo.rabbitmq.convert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

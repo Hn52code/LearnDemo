@@ -1,4 +1,4 @@
-package com.zhn.demo.rabbitmq.mq4javabean;
+package com.zhn.demo.rabbitmq.convert;
 
 import java.util.Date;
 import java.util.StringJoiner;

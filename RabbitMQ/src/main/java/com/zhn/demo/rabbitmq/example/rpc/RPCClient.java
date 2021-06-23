@@ -19,7 +19,7 @@ public class RPCClient {
 
     private Connection connection;
     private Channel channel;
-    private String requestQueueName = "rpc_queue";
+    private String requestQueueName = "rpc.queue";
     private String replyQueueName;
 
     public RPCClient() throws IOException, TimeoutException {

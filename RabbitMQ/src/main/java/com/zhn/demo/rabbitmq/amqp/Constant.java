@@ -1,6 +1,6 @@
 package com.zhn.demo.rabbitmq.amqp;
 
-public class Config {
+public class Constant {
 
     public static String QUEUE = "queue";
 

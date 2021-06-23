@@ -66,7 +66,7 @@ default
     "subUrl": "http://baidu.com",
     "createTime": 1529055308000,
     "createBy": "ss",
-    "updateTime": null,
+    "reqTime": null,
     "updateBy": null,
     "isSub": 0,
     "isDel": 0
@@ -86,7 +86,7 @@ default
     "subUrl": 地址,
     "createTime": 创建时间,
     "createBy": 创建人,
-    "updateTime": 更新时间,
+    "reqTime": 更新时间,
     "updateBy": 更新人,
     "isSub": 是否订阅（0订阅,1取消订阅）
     "isDel": 是否删除（0未删除，1删除）
@@ -159,7 +159,7 @@ default
     "subUrl": 地址,
     "createTime": 创建时间,
     "createBy": 创建人,
-    "updateTime": 更新时间,
+    "reqTime": 更新时间,
     "updateBy": 更新人,
     "isSub": 是否订阅（0订阅,1取消订阅）
     "isDel": 是否删除（0未删除,1已删除）

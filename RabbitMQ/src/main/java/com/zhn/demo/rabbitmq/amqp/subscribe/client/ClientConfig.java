@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 
-import static com.zhn.demo.rabbitmq.amqp.Config.EXCHANGE;
-import static com.zhn.demo.rabbitmq.amqp.Config.QUEUE;
+import static com.zhn.demo.rabbitmq.amqp.Constant.EXCHANGE;
+import static com.zhn.demo.rabbitmq.amqp.Constant.QUEUE;
 
 
 @Configuration

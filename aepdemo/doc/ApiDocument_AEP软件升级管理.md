@@ -163,7 +163,7 @@ json
         "deviceId": "119b7827919d401d8462149ad34ff396",
         "imei": "869060030003827",
         "productName": "升级测试",
-        "updateTime": "2019-11-27 09:26:59",
+        "reqTime": "2019-11-27 09:26:59",
         "taskState": "6",
         "resultCode": "5000",
         "finishTime": "2019-11-27",

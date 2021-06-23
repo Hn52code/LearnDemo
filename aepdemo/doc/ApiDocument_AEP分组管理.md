@@ -267,7 +267,7 @@ json
         "activeCount": 0,
         "description": "strfewfewing",
         "createTime": 1558423978000,
-        "updateTime": 1558424035000
+        "reqTime": 1558424035000
       },
       {
         "deviceGroupId": 193,
@@ -278,7 +278,7 @@ json
         "activeCount": 1,
         "description": "",
         "createTime": 1558421733000,
-        "updateTime": 1558421733000
+        "reqTime": 1558421733000
       }
     ]
   }

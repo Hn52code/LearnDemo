@@ -77,7 +77,7 @@ MQTT,T-Link,HTTP,TCP协议：
        "firmwareVersion": "",//string，版本信息
        "deviceStatus": 2,//Integer，设备状态 0:已注册，1：已激活，2：已注销
        "createTime": 1555557239000,//Timestamp，创建时间
-       "updateTime": 1555557274000,//Timestamp，修改时间
+       "reqTime": 1555557274000,//Timestamp，修改时间
        "activeTime": 1555557243000,//Timestamp，激活时间
        "logoutTime": 1555557274000,//Timestamp，注销时间
        "netStatus": 2,//设备在线状态
@@ -109,7 +109,7 @@ LWM2M协议：
        "autoObserver": 0,//Integer，是否订阅,0.订阅1.不订阅
        "createTime": 1558404977000,//Long，创建时间
        "createBy": "aepuser",//String，创建者
-       "updateTime": 1558760482000,//Long，更新时间
+       "reqTime": 1558760482000,//Long，更新时间
        "updateBy": "wwww",//String，更新者
        "netStatus": 2,//Integer，设备在线状态，1在线2不在线
        "onlineAt": 1558760604611,//Long，设备最后上线时间
@@ -136,7 +136,7 @@ NB网关：
        "deviceStatus": 2,//Integer，设备状态:0.已注册 1.已激活 2.已注销
        "createTime": 1540540567000,//Long，创建时间
        "createBy": "aepuser",//String，创建者
-       "updateTime": 1540546732000,//Long，更新时间
+       "reqTime": 1540546732000,//Long，更新时间
        "updateBy": "eeee",//String，更新者
        "netStatus": 2,//Integer，设备在线状态，1在线2不在线
        "onlineAt": 1558345352273,//Long 设备最后上线时间
@@ -165,7 +165,7 @@ JT/T808协议：
        "deviceVersion": "",//String,设备版本号
        "deviceStatus": 2,//Integer,设备状态:-1.未注册 0.已注册 1.已激活 2.已注销
        "createTime": 1555920751000,//Long,创建时间
-       "updateTime": 1555922101000,//Long,更新时间
+       "reqTime": 1555922101000,//Long,更新时间
        "activeTime": 1555921801000,//Long,激活时间
        "logoutTime": 1555922101000,//Long,注销时间
        "createBy": null,//String,创建者
@@ -234,7 +234,7 @@ MQTT、T-Link、HTTP、TCP:
     "firmwareVersion": "",//string，版本信息
     "deviceStatus": 2,//Integer，设备状态 0:已注册，1：已激活，2：已注销
     "createTime": 1555557239000,//Timestamp，创建时间
-    "updateTime": 1555557274000,//Timestamp，修改时间
+    "reqTime": 1555557274000,//Timestamp，修改时间
     "activeTime": 1555557243000,//Timestamp，激活时间
     "logoutTime": 1555557274000,//Timestamp，注销时间
     "netStatus": 2,//设备在线状态
@@ -260,7 +260,7 @@ LWM2M：
     "autoObserver": 0,//Integer，是否订阅,0.自动订阅1.取消自动订阅
     "createTime": 1558404977000,//Long，创建时间
     "createBy": "aepuser",//String，创建者
-    "updateTime": 1558760482000,//Long，更新时间
+    "reqTime": 1558760482000,//Long，更新时间
     "updateBy": "wwww",//String，更新者
     "netStatus": 2,//Integer，设备在线状态，1在线2不在线
     "onlineAt": 1558760604611,//Long，设备最后上线时间
@@ -281,7 +281,7 @@ NB网关：
     "deviceStatus": 2,//Integer，设备状态:0.已注册 1.已激活 2.已注销
     "createTime": 1540540567000,//Long，创建时间
     "createBy": "aepuser",//String，创建者
-    "updateTime": 1540546732000,//Long，更新时间
+    "reqTime": 1540546732000,//Long，更新时间
     "updateBy": "eeee",//String，更新者
     "netStatus": 2,//Integer，设备在线状态，1在线2不在线
     "onlineAt": 1558345352273,//Long 设备最后上线时间
@@ -303,7 +303,7 @@ JT/T808协议：
     "deviceVersion": "",//String,设备版本号
     "deviceStatus": 2,//Integer,设备状态:-1.未注册 0.已注册 1.已激活 2.已注销
     "createTime": 1555920751000,//Long,创建时间
-    "updateTime": 1555922101000,//Long,更新时间
+    "reqTime": 1555922101000,//Long,更新时间
     "activeTime": 1555921801000,//Long,激活时间
     "logoutTime": 1555922101000,//Long,注销时间
     "createBy": null,//String,创建者

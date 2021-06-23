@@ -64,14 +64,14 @@ default
 "isOpen":true,
 "token":" xxxx",
 "createTime":"2020-08-18 16:44:30",
-"updateTime":"2020-08-18 16:44:30"
+"reqTime":"2020-08-18 16:44:30"
 }
 其中：
 "tenantId": 租户id,
 "isOpen": 开通状态，true(1):开通；false(0):未开通
 "token": 认证JWT信息
 "createTime": 创建时间,
-"updateTime": 更新时间,
+"reqTime": 更新时间,
 }
 
   "code": 返回码(0成功),
@@ -258,7 +258,7 @@ default
 "isEnable":true,
 "isDel":false,
 "createTime":"2020-08-18 16:53:17",
-"updateTime":"2020-10-27 10:48:43",
+"reqTime":"2020-10-27 10:48:43",
 "deptCode":"0"
 }
 其中：
@@ -270,7 +270,7 @@ default
 "isEnable":该主题是否启用, true(1):是；false(0):否,
 "isDel": 该主题是否已删除, true(1):是；false(0):否,
 "createTime":创建时间,
-"updateTime": 更新时间,
+"reqTime": 更新时间,
 "deptCode": 机构id
 }
   "code": 返回码(0成功),
@@ -393,7 +393,7 @@ default
 "isEnable":true,
 "isDel":false,
 "createTime":"2020-12-18 14:25:58",
-"updateTime":"2020-12-18 14:25:58",
+"reqTime":"2020-12-18 14:25:58",
 "deptCode":"0"
 },
 {
@@ -409,7 +409,7 @@ default
 "isEnable":该主题是否启用, true(1):是；false(0):否,
 "isDel": 该主题是否已删除, true(1):是；false(0):否,
 "createTime":创建时间,
-"updateTime": 更新时间,
+"reqTime": 更新时间,
 "deptCode": 机构id
 }
   "code": 返回码(0成功),
@@ -560,7 +560,7 @@ default
 "subTypesArray":[1,2,3],
 "isDel":false,
 "createTime":"2020-12-17 15:33:27",
-"updateTime":"2020-12-17 16:01:05"
+"reqTime":"2020-12-17 16:01:05"
 },
 {
 …
@@ -573,7 +573,7 @@ default
 "subTypes":消息类型int数组，（1.设备数据变化2.下发指令响应3.设备事件上报4.设备上下线通知5.创建删除设备9.TUP合并数据上报）,
 "isDel": 该主题是否已删除, true(1):是；false(0):否,
 "createTime":创建时间,
-"updateTime": 更新时间,
+"reqTime": 更新时间,
 }
   "code": 返回码(0成功),
   "msg": 返回描述(ok成功)

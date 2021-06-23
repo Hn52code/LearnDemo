@@ -1,6 +1,6 @@
 package com.zhn.demo.rabbitmq.amqp.subscribe.server;
 
-import com.zhn.demo.rabbitmq.amqp.Config;
+import com.zhn.demo.rabbitmq.amqp.Constant;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,7 @@ public class ServerBoot {
 
         AmqpTemplate template = context.getBean(RabbitTemplate.class);
 
-        template.convertAndSend(Config.EXCHANGE,"","nihao ");
+        template.convertAndSend(Constant.EXCHANGE,"","nihao ");
 
     }
 
