@@ -15,7 +15,7 @@
         <module>JavaWeb</module>
 
         <module>SpringAll</module>
-        <module>web-example</module>
+        <module>WebExample</module>
 
         <module>Redis</module>
         <module>Netty</module>

@@ -9,10 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>web-example</artifactId>
+    <artifactId>WebExample</artifactId>
     <packaging>war</packaging>
 
-    <name>web-example Maven Webapp</name>
+    <name>WebExample Maven Webapp</name>
     <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
@@ -23,7 +23,6 @@
     </properties>
 
     <dependencies>
-
 
         <!-- java类辅助工具包 lombok -->
         <!--lombok 给Javabean 简略方法（如 getter setter toString）还有其他@Slf4j等等 -->
@@ -189,7 +188,7 @@
     </dependencies>
 
     <build>
-        <finalName>web-example</finalName>
+        <finalName>WebExample</finalName>
         <resources>
             <resource>
                 <!--   描述存放资源的目录，该路径相对POM路径-->
