@@ -131,12 +131,6 @@
             <version>0.9.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-compiler</artifactId>
-            <version>7.50.0.Final</version>
-        </dependency>
-
     </dependencies>
 
 </project>

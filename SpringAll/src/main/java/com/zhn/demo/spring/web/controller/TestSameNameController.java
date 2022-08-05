@@ -1,4 +1,4 @@
-package com.zhn.demo.spring.web.controller.same.name1;
+package com.zhn.demo.spring.web.controller;
 
 import org.springframework.stereotype.Controller;
 
