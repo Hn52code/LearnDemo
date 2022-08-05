@@ -91,10 +91,10 @@ public class StudentController {
     public void sendEmail() throws MessagingException {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
         javaMailSender.setProtocol("smtp");
-        javaMailSender.setHost("smtp.qq.com");
+        javaMailSender.setHost("smtp.xx.com");
         javaMailSender.setPort(465);
-        javaMailSender.setUsername("961848179@qq.com");
-        javaMailSender.setPassword("jccutwezjqhsbbgb");
+        javaMailSender.setUsername("xxxx@xx.com");
+        javaMailSender.setPassword("xxxxxxxx");
         javaMailSender.setHost("smtp.qq.com");
         javaMailSender.setDefaultEncoding("UTF-8");
         //ssl加密，需要加，否则无法运行
