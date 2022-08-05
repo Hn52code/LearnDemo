@@ -72,32 +72,6 @@
             <version>${xstream.version}</version>
         </dependency>
 
-
-        <!--阿里云SDK核心包-->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <!--阿里云语音服务-->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-dyvmsapi</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-        <!--阿里云短信服务-->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <!--阿里云移动推送服务-->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-push</artifactId>
-            <version>3.10.1</version>
-        </dependency>
-
         <!--lombok 给Javabean 简略方法（如 getter setter） -->
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
@@ -125,6 +99,12 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>${httpclient.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpasyncclient</artifactId>
+            <version>${httpclientAsyn.version}</version>
         </dependency>
 
         <!-- jackson -->

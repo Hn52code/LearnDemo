@@ -30,8 +30,8 @@ public class AepDeviceCommandDemo {
 	public void testApi() throws Exception {
 
 		AepDeviceCommandClient client = AepDeviceCommandClient.newClient()
-				.appKey("xxxx")
-				.appSecret("xxxx")
+				.appKey("stqO6tloZYd")
+				.appSecret("EOaK9hdwIw")
 				.build();
 
 		{
@@ -39,20 +39,16 @@ public class AepDeviceCommandDemo {
 			// request.setParam..  	// set your request params here
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode root = mapper.createObjectNode();
-			root.put("deviceId", "xxxxxx");
+			root.put("deviceId", "887ce01173f64a02803badbc3c54b3fd");
 			root.put("operator", "demo");
-			root.put("productId", "xxxxx");
+			root.put("productId", 15087317);
 			root.put("ttl", "7200");
-			root.put("deviceGroupId", 0);
-			root.put("level", 1);
 			ObjectNode content = mapper.createObjectNode();
-			content.put("serviceIdentifier", "alarm_cmd");
-			ObjectNode params = mapper.createObjectNode();
-			params.put("alarm_mode",0);
-			content.set("params", params);
+			content.put("payload", "a8000003040200");
+			content.put("dataType", 2);
 			root.set("content", content);
 			String body = root.toString();
-			request.setParamMasterKey("6082b3c467764a9daa1a528ff8359a22");
+			request.setParamMasterKey("c52eb74d93494054b3403619e5c97b25");
 			request.setBody(body.getBytes(StandardCharsets.UTF_8));
 			System.out.println(client.CreateCommand(request));
 		}

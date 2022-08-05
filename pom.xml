@@ -10,23 +10,27 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>DesignModel</module>
+
         <module>JavaBasic</module>
         <module>JavaWeb</module>
-        <module>Netty</module>
-        <module>SomeLib</module>
-        <module>RabbitMQ</module>
+
         <module>SpringAll</module>
-        <module>Redis</module>
-        <module>Swagger2</module>
-        <module>Wechat</module>
-        <module>Shiro</module>
-        <module>Log</module>
         <module>web-example</module>
+
+        <module>Redis</module>
+        <module>Netty</module>
+        <module>RabbitMQ</module>
+        <module>Shiro</module>
+        <module>Swagger2</module>
+
+        <module>Log</module>
+        <module>MultiWayConfig</module>
+
+        <module>SomeLib</module>
+        <module>Wechat</module>
         <module>socketio</module>
-        <module>changeprofile</module>
-        <module>crawler</module>
-        <module>myiot</module>
         <module>aepdemo</module>
+
     </modules>
 
     <properties>
@@ -61,6 +65,7 @@
 
         <!-- httpclient 框架 -->
         <httpclient.version>4.5.9</httpclient.version>
+        <httpclientAsyn.version>4.1.5</httpclientAsyn.version>
 
         <!-- 办公文档 poi -->
         <poi.version>3.17</poi.version>
@@ -124,6 +129,6 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
         </dependency>
-
     </dependencies>
+
 </project>

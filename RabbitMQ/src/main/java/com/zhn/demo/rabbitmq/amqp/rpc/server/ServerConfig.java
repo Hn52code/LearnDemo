@@ -8,10 +8,13 @@ import com.zhn.demo.rabbitmq.amqp.Constant;
 import com.zhn.demo.rabbitmq.amqp.rpc.Request;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.DirectRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.DirectReplyToMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
@@ -19,6 +22,10 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.DefaultManagedTaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -35,19 +42,21 @@ public class ServerConfig {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory();
         factory.setUri("amqp://admin:admin@localhost:5672");
+//        factory.setChannelCacheSize(25);
+//        factory.setCacheMode(CachingConnectionFactory.CacheMode.CONNECTION);
+//        factory.setConnectionLimit(100);
+        factory.setChannelCheckoutTimeout(10000);
         return factory;
     }
 
     @Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory factory) {
-        RabbitAdmin admin = new RabbitAdmin(factory);
-        return admin;
+        return new RabbitAdmin(factory);
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory factory) {
-        RabbitTemplate template = new RabbitTemplate(factory);
-        return template;
+        return new RabbitTemplate(factory);
     }
 
     @Bean
@@ -55,16 +64,39 @@ public class ServerConfig {
         return new Queue(Constant.QUEUE_RPC);
     }
 
+//    @Bean
+//    public SimpleMessageListenerContainer simpleMessageListenerContainer(ConnectionFactory factory) {
+//        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+//        container.setConnectionFactory(factory);
+//        container.setQueues(queue());
+//        /* 设置通道预处理数 */
+//        container.setPrefetchCount(10);
+//        /* 设置并发数通道 */
+//        container.setConcurrentConsumers(5);
+//        /* 设置最大允许的消费者 */
+//        container.setMaxConcurrentConsumers(100);
+//        /* 最小启动新消费者的间隔时间 此处2s 默认10s*/
+//        container.setStartConsumerMinInterval(2);
+//        /* 最小关闭消费者的间隔时间，此处设置5s 默认1min*/
+//        container.setStopConsumerMinInterval(5000);
+//        /* 设置触发活跃的间隔时间 默认10s*/
+//        container.setConsecutiveActiveTrigger(10);
+//        /* 设置触发闲置的间隔时间, 默认10s*/
+//        container.setConsecutiveIdleTrigger(10);
+//        /* 消息确认 */
+//        container.setAcknowledgeMode(AcknowledgeMode.AUTO);
+//        container.setMessageListener(messageListenerAdapter());
+//        return container;
+//    }
+
+
     @Bean
-    public SimpleMessageListenerContainer simpleMessageListenerContainer(ConnectionFactory factory) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+    public DirectRabbitListenerContainerFactory directRabbitListenerContainerFactory(ConnectionFactory factory) {
+        DirectRabbitListenerContainerFactory  container = new DirectRabbitListenerContainerFactory ();
         container.setConnectionFactory(factory);
-        container.setQueues(queue());
-        container.setPrefetchCount(10);
-        // container.setConcurrentConsumers(20);
-        container.setMaxConcurrentConsumers(100);
+        container.setConsumersPerQueue(5);
         container.setAcknowledgeMode(AcknowledgeMode.AUTO);
-        container.setMessageListener(messageListenerAdapter());
+//        container.setMessageConverter(messageConverter());
         return container;
     }
 

@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class MapTest {
 
@@ -22,6 +24,25 @@ public class MapTest {
         System.out.println(map.computeIfAbsent("birthday", k -> 1349815687));
         System.out.println(map.get("birthday"));
 
+    }
+
+    @Test
+    public void testMapFilter() {
+        Map<String, Object> map = new ConcurrentHashMap<>();
+        map.put("1", "1");
+        map.put("2", "1");
+        map.put("3", "1");
+        map.put("4", "1");
+        // 使用filter后 map 本身不会被过滤，需要过滤后的数据需重新指向
+        map.entrySet()
+                .stream()
+                .filter(entry -> !entry.getKey().equals("2"))
+                .forEach(entry -> System.out.println(entry.getKey() + "_________" + entry.getValue()));
+        map.entrySet()
+                .stream()
+                .filter(entry -> !entry.getKey().equals("2"))
+                .collect(Collectors.toConcurrentMap(Map.Entry::getKey, Map.Entry::getValue));
+        System.out.println(map.toString());
     }
 
 }

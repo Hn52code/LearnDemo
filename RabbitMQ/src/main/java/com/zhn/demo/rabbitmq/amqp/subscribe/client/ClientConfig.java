@@ -25,15 +25,15 @@ public class ClientConfig {
     public Queue queue() {
         return new Queue(QUEUE);
     }
-
-    @Bean
-    public FanoutExchange exchange() {
-        return new FanoutExchange(EXCHANGE);
-    }
+//
+//    @Bean
+//    public FanoutExchange exchange() {
+//        return new FanoutExchange(EXCHANGE);
+//    }
 
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(queue()).to(exchange());
+        return BindingBuilder.bind(queue()).to(DirectExchange.DEFAULT).with(QUEUE);
     }
 
     @Bean
@@ -57,9 +57,7 @@ public class ClientConfig {
 
     @Bean
     public MessageConverter messageConverter(){
-        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
-//        converter.se
-        return converter;
+        return new Jackson2JsonMessageConverter();
     }
 
 

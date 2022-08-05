@@ -22,10 +22,10 @@ public class UdpNettyClient {
                     .channel(NioDatagramChannel.class)
                     .option(ChannelOption.SO_BROADCAST, true)
                     .handler(new UdpClientMsgHandler());
-            Channel channel = bootstrap.bind(9999).sync().channel();
+            Channel channel = bootstrap.bind(9988).sync().channel();
             channel.writeAndFlush(new DatagramPacket(
                     Unpooled.copiedBuffer("hello!!!", CharsetUtil.UTF_8),
-                    new InetSocketAddress("192.168.0.66", 8888))).sync();
+                    new InetSocketAddress("127.0.0.1",8888))).sync();
             channel.closeFuture().await();
         } catch (Exception e) {
             e.printStackTrace();
