@@ -25,7 +25,7 @@
         console.log("连接已断开。。。");
     });
 
-    socket.on("server-message", (data, ackRequest) => {
+    socket.on("information-message", (data, ackRequest) => {
         console.log(data);
         console.log(ackRequest);
     });

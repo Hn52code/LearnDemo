@@ -7,6 +7,10 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!-- web 其它配置 -->
+    <context:component-scan base-package="com.zhn.demo.spring.web.exc"/>
+
+    <!-- 接口 -->
     <context:annotation-config/>
     <context:component-scan base-package="com.zhn.demo.spring.web.controller"/>
 
@@ -60,20 +64,19 @@
     <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <bean class="com.zhn.demo.spring.web.utils.StringToEnumConverterFactory"/>
+                <!-- springmvc中自带的枚举转换，无须额外实现，如特殊需求可自定义实现 -->
+                <!--<bean class="com.zhn.demo.spring.web.utils.StringToEnumConverter"/>-->
             </list>
         </property>
     </bean>
 
     <!-- 允许资源通过，3.0之前使用如下配置 -->
     <!-- 注意mapping的值为uri后配**表示所有，切勿在location值后加**，否则找不到资源。-->
-    <mvc:resources location="/common/" mapping="/common/**"/>
-    <mvc:resources location="/background/" mapping="/background/**"/>
-    <mvc:resources location="/frontdesk/" mapping="/frontdesk/**"/>
+    <!--<mvc:resources location="/common/" mapping="/common/**"/>-->
 
-    <!--在SpringMVC3.0之后推荐使用<mvc:default-servlet-handler/>， 它会像一个检查员，对进入DispatcherServlet的URL进行筛查，
-    如果发现是静态资源的请求，就将该请求转由Web应用服务器默认的Servlet处理，如果不是静态资源的请求，才由DispatcherServlet继续处理。-->
-    <mvc:default-servlet-handler/>
+    <!-- 在SpringMVC3.0之后新增，配置默认静态资源处理器，
+    这意味着，如果存在找不到资源的404，会往Tomcat上抛，在项目中如果考虑全局异常404处理时需要注释 -->
+    <!--<mvc:default-servlet-handler/>-->
 
     <!-- 多部分文件上传 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -109,19 +112,20 @@
 
     <!-- 配置视图解析器 -->
     <!-- InternalResourceViewResolver:可以对html的解析器 -->
+<!--
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!-- 在视图解析器配置前缀与后缀 -->
+        &lt;!&ndash; 在视图解析器配置前缀与后缀 &ndash;&gt;
         <property name="prefix" value="/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+-->
 
     <!-- 配置拦截器 -->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/"/>
             <mvc:exclude-mapping path="/img/"/>
-            <bean class="com.zhn.pro.demo.springweb.utils.TestHandlerInterceptor">
-            </bean>
+            <bean class="com.zhn.demo.spring.web.utils.TestHandlerInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

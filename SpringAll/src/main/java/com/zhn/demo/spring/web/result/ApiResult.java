@@ -1,7 +1,7 @@
-package com.zhn.demo.spring.web.restresult;
+package com.zhn.demo.spring.web.result;
 
 // App之API 返回结果统一bean
-public class ApiResponseResult {
+public class ApiResult {
 
     //错误码
     private int code;
@@ -54,10 +54,10 @@ public class ApiResponseResult {
         this.url = url;
     }
 
-    public ApiResponseResult() {
+    public ApiResult() {
     }
 
-    public ApiResponseResult(int code, String msg, String url, String createTime, Object data) {
+    public ApiResult(int code, String msg, String url, String createTime, Object data) {
         this.code = code;
         this.msg = msg;
         this.url = url;

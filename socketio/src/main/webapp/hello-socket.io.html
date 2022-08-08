@@ -13,7 +13,7 @@
 
     // 连接事件
     socket.on('connect', () => {
-        socket.emit('server-rec', "hello server");
+        socket.emit('information-rec', "hello information");
     });
 
     socket.on("client-rec", (data, ackServerBack) => {

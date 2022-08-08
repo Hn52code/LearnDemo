@@ -14,8 +14,8 @@ import java.util.List;
 /* demo 参数验证 */
 @Validated  // 告诉MethodValidationPostProcessor此Bean需要开启方法级别验证支持
 @RestController
-@RequestMapping(value = "/extend/parameter/valid")
-public class ValidParameterController {
+@RequestMapping(value = "/valid/paras")
+public class ValidParasController {
 
     /**
      * 值得注意的地方：
@@ -35,10 +35,18 @@ public class ValidParameterController {
         System.out.println("age: " + age + " name: " + name);
     }
 
+    /* 表单实体 接收Content-Type为application/x-www-form-urlencoded */
+    @PostMapping("/obj")
+    public String validEntityParaBodyThrowError(@Valid Company company) {
+        System.out.println(company.toString());
+        return "";
+    }
+
     /* 当被检验的参数后不跟 BindingResult result，则错误将上抛至全局异常，做全局异常统一处理时，此处这处理便好 */
     /* json实体 */
     @PostMapping("/obj/json/validresult")
     public String validEntityParaByRequestBodyAndBindResult(@RequestBody @Valid Company company, BindingResult result) {
+        System.out.println(company.toString());
         StringBuilder builder = new StringBuilder();
         if (result.hasErrors()) {
             List<ObjectError> allErrors = result.getAllErrors();
@@ -51,12 +59,7 @@ public class ValidParameterController {
     /* json实体 */
     @PostMapping("/obj/json")
     public String validEntityParaByRequestBodyThrowError(@RequestBody @Valid Company company) {
-        return "";
-    }
-
-    /* 表单实体 接收Content-Type为application/x-www-form-urlencoded */
-    @PostMapping("/obj")
-    public String validEntityParaBodyThrowError(@Valid Company company) {
+        System.out.println(company.toString());
         return "";
     }
 

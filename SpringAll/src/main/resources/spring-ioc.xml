@@ -4,7 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-    <bean class="com.zhn.demo.spring.basic.ioc1.SpringContextUtil"/>
+    <bean class="com.zhn.demo.spring.basic.ioc.SpringContextUtil"/>
 
 </beans>

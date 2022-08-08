@@ -1,6 +1,6 @@
 package com.zhn.demo.spring.web.entity;
 
-public class People {
+public class Member {
 
     private int id;
     private String name;

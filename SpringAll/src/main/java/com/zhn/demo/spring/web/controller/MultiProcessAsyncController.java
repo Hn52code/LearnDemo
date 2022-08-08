@@ -1,5 +1,6 @@
 package com.zhn.demo.spring.web.controller;
 
+import com.zhn.demo.spring.web.entity.Client;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +11,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping("/test")
-public class TestController {
+@RequestMapping("/async")
+public class MultiProcessAsyncController {
 
-    private static ConcurrentHashMap<String, Client> clientMap = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, Client> clientMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     void initMap() {
@@ -42,39 +43,4 @@ public class TestController {
         return "";
     }
 
-}
-
-
-class Client {
-    private String name;
-    private String value;
-    private ConcurrentHashMap<String, CountDownLatch> countMap = new ConcurrentHashMap<>();
-
-    public Client(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public ConcurrentHashMap<String, CountDownLatch> getCountMap() {
-        return countMap;
-    }
-
-    public void setCountMap(ConcurrentHashMap<String, CountDownLatch> countMap) {
-        this.countMap = countMap;
-    }
 }

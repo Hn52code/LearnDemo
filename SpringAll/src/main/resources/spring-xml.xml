@@ -14,7 +14,7 @@
     <!-- 2. 配置AOP -->
     <aop:config>
         <!-- 配置切入点-->
-        <aop:pointcut id="pointcut" expression="execution(* com.zhn.pro.demo.spring.basic.aop.hello.*.*(..))"/>
+        <aop:pointcut id="pointcut" expression="execution(* com.zhn.demo.spring.basic.aop.hello.*.*(..))"/>
         <!-- 配置切面的通知事件 ，其中引入切面类实例，通知事件映射方法。 -->
         <aop:aspect id="validAspect" ref="validAspect">
             <aop:before method="beforeMethod" pointcut-ref="pointcut"/>

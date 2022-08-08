@@ -1,6 +1,6 @@
 package com.zhn.demo.spring.web.exc;
 
-import com.zhn.demo.spring.web.restresult.ApiResultCode;
+import com.zhn.demo.spring.web.result.ApiResultCode;
 
 public class BusinessException extends RuntimeException {
 

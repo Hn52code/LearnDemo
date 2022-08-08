@@ -1,6 +1,6 @@
 package com.zhn.demo.spring.web.controller;
 
-import com.zhn.demo.spring.web.entity.People;
+import com.zhn.demo.spring.web.entity.Member;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -53,8 +53,8 @@ public class RestBasicUseController {
 
     /* 缺省注解，url:/base/rest/getObj?id=123&name=zhn&age=24 多个参数转对象... */
     @GetMapping("/getObj")
-    public String getNoAnnotationObj(People people) {
-        System.out.println(people.toString());
+    public String getNoAnnotationObj(Member member) {
+        System.out.println(member.toString());
         return "getNoAnnotationObj";
     }
 
@@ -90,17 +90,17 @@ public class RestBasicUseController {
 
     /* 注解 参数实体 url,body传参 */
     @PostMapping("/post/{type}")
-    public String postNoAnnotationPathAndBody(@PathVariable String type, @RequestBody People people) {
+    public String postNoAnnotationPathAndBody(@PathVariable String type, @RequestBody Member member) {
         System.out.println(type);
-        System.out.println(people.toString());
+        System.out.println(member.toString());
         return "postNoAnnotation";
     }
 
 
     /* 无注解 对象参数 表单传参, 自动将表单参数转化为实体对象*/
     @PostMapping("/postObj")
-    public String postNoAnnotationObj(People people) {
-        System.out.println(people);
+    public String postNoAnnotationObj(Member member) {
+        System.out.println(member);
         return "postNoAnnotationObj";
     }
 
@@ -109,8 +109,8 @@ public class RestBasicUseController {
      * 将该参数内容转化为指定的对象参数
      */
     @PostMapping("/postObj2")
-    public String postWithAnnotationObj(@RequestBody People people) {
-        System.out.println(people.toString());
+    public String postWithAnnotationObj(@RequestBody Member member) {
+        System.out.println(member.toString());
         return "postWithAnnotationObj";
     }
 
@@ -153,8 +153,8 @@ public class RestBasicUseController {
 
     /* PUT请求 json参数 contentType：application/json 方式 */
     @PutMapping("/putObj")
-    public String putObj(@RequestBody People people) {
-        System.out.println(people.toString());
+    public String putObj(@RequestBody Member member) {
+        System.out.println(member.toString());
         return "putWithAnnotation";
     }
 

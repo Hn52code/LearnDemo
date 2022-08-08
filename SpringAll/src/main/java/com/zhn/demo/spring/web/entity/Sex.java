@@ -1,6 +1,7 @@
 package com.zhn.demo.spring.web.entity;
 
 public enum Sex {
+
     BOY(1,"boy"),
     GIRL(2,"girl"),
     ;

@@ -1,7 +1,7 @@
 package com.zhn.demo.spring.web.exc;
 
-import com.zhn.demo.spring.web.restresult.ApiResponseResult;
-import com.zhn.demo.spring.web.restresult.ApiResultUtil;
+import com.zhn.demo.spring.web.result.ApiResult;
+import com.zhn.demo.spring.web.result.ApiResultUtil;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
@@ -39,20 +39,22 @@ public class GlobalExceptionHandler {
 
     /* 400 请求错误 */
     @ExceptionHandler({
+            MissingPathVariableException.class,
             ServletRequestBindingException.class,
+            ConversionNotSupportedException.class,
             TypeMismatchException.class,
             HttpMessageNotReadableException.class,
             MissingServletRequestPartException.class,
             MissingServletRequestParameterException.class,
     })
-    public ApiResponseResult handle400Exception(HttpServletRequest request) {
+    public ApiResult handle400Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.BAD_REQUEST.value(),
                 "错误请求",
                 request.getRequestURI());
     }
 
-    @ExceptionHandler(BindException.class)
-    public ApiResponseResult handle400BindingException(HttpServletRequest request, BindException e) {
+    @ExceptionHandler({BindException.class})
+    public ApiResult handle400BindingException(HttpServletRequest request, BindException e) {
         StringBuilder buffer = new StringBuilder();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         for (ObjectError err : errors) {
@@ -64,9 +66,9 @@ public class GlobalExceptionHandler {
     }
 
     /* 400 错误中，接口方法中被验证注解修饰的复杂类型参时，验证错误时抛出异常 */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResponseResult handle400NotValidException(HttpServletRequest request,
-                                                        MethodArgumentNotValidException e) {
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ApiResult handle400NotValidException(HttpServletRequest request,
+                                                MethodArgumentNotValidException e) {
         StringBuilder buffer = new StringBuilder();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
         for (ObjectError err : errors) {
@@ -79,12 +81,12 @@ public class GlobalExceptionHandler {
 
     /* 400错误中，接口方法中被验证注解修饰的简单类型参时，验证错误抛出该异常 */
     @ExceptionHandler(ConstraintViolationException.class)
-    public ApiResponseResult handle400ConstraintViolationException(HttpServletRequest request,
-                                                                   ConstraintViolationException e) {
+    public ApiResult handle400ConstraintViolationException(HttpServletRequest request,
+                                                           ConstraintViolationException e) {
         StringBuilder buffer = new StringBuilder();
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
         if (!CollectionUtils.isEmpty(constraintViolations)) {
-            for (ConstraintViolation constraintViolation : constraintViolations) {
+            for (ConstraintViolation<?> constraintViolation : constraintViolations) {
                 buffer.append(constraintViolation.getMessage()).append(";");
             }
         }
@@ -94,8 +96,8 @@ public class GlobalExceptionHandler {
     }
 
     /* 404 资源找不到错误 */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ApiResponseResult handle404Exception(HttpServletRequest request) {
+    @ExceptionHandler({NoHandlerFoundException.class})
+    public ApiResult handle404Exception(NoHandlerFoundException e, HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.NOT_FOUND.value(),
                 "找不到资源",
                 request.getRequestURI());
@@ -103,7 +105,7 @@ public class GlobalExceptionHandler {
 
     /* 405 方法不允许错误 */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ApiResponseResult handle405Exception(HttpServletRequest request) {
+    public ApiResult handle405Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 "请求方法不允许",
                 request.getRequestURI());
@@ -111,7 +113,7 @@ public class GlobalExceptionHandler {
 
     /* 406 不接受 无法使用请求的内容特性响应请求的网页 */
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public ApiResponseResult handle406Exception(HttpServletRequest request) {
+    public ApiResult handle406Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.NOT_ACCEPTABLE.value(),
                 "拒绝请求",
                 request.getRequestURI());
@@ -119,7 +121,7 @@ public class GlobalExceptionHandler {
 
     /* 415  服务器无法处理请求附带的媒体格式 */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ApiResponseResult handle415Exception(HttpServletRequest request) {
+    public ApiResult handle415Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),
                 "不支持的媒体类型",
                 request.getRequestURI());
@@ -127,12 +129,10 @@ public class GlobalExceptionHandler {
 
     /* 500 服务器内部错误 */
     @ExceptionHandler({
-            MissingPathVariableException.class,
-            ConversionNotSupportedException.class,
             HttpMessageNotWritableException.class,
             Exception.class
     })
-    public ApiResponseResult handle500Exception(HttpServletRequest request) {
+    public ApiResult handle500Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "服务内部异常",
                 request.getRequestURI());
@@ -140,7 +140,7 @@ public class GlobalExceptionHandler {
 
     /* 503 服务不可用 */
     @ExceptionHandler(AsyncRequestTimeoutException.class)
-    public ApiResponseResult handle503Exception(HttpServletRequest request) {
+    public ApiResult handle503Exception(HttpServletRequest request) {
         return ApiResultUtil.createHttpExceptionResult(HttpStatus.SERVICE_UNAVAILABLE.value(),
                 "服务不可用",
                 request.getRequestURI());
@@ -149,7 +149,7 @@ public class GlobalExceptionHandler {
     /*自定义错误*/
     /* 业务异常包含所有业务异常捕捉 */
     @ExceptionHandler(BusinessException.class)
-    public ApiResponseResult handleLoginException(HttpServletRequest request, BusinessException e) {
+    public ApiResult handleLoginException(HttpServletRequest request, BusinessException e) {
         return ApiResultUtil.createBusinessExceptionResult(e.getCode(), e.getMessage(), request.getRequestURI());
     }
 

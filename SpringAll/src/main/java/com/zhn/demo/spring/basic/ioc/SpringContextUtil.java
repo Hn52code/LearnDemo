@@ -1,14 +1,13 @@
-package com.zhn.demo.spring.basic.ioc1;
+package com.zhn.demo.spring.basic.ioc;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 /**
- * @program: pads_sys
- * @description: 获取spring容器的bean工具类
- * @author: Mr.ZhouHN
- * @create: 2018-05-17 15:26
+ * @description 获取spring容器的bean工具类
+ * @author Mr.ZhouHN
+ * @since 2018-05-17 15:26
  */
 public class SpringContextUtil implements ApplicationContextAware {
 

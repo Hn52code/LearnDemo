@@ -1,6 +1,7 @@
-package com.zhn.demo.spring.web.restresult;
+package com.zhn.demo.spring.web.result;
 
 public enum ApiResultCode {
+
     USER_NOT_EXIST(1001,"用户不存在"),
     USER_PWD_ERROR(1002,"用户或密码错误"),
     ;

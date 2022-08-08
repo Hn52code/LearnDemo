@@ -9,8 +9,8 @@
 <hr>
 <form id="upload" action="${pageContext.request.contextPath}/base/rest/upload" method="post"
       enctype="multipart/form-data">
-    <input attr="file" name="fileName"/>
-    <input attr="submit" value="上传"/>
+    <input type="file" name="fileName"/>
+    <input type="submit" value="上传"/>
 </form>
 <hr>
 <button onclick="getWithAnnotation();">GET-url-参数带注解</button>
@@ -34,7 +34,7 @@
 </body>
 <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 <script>
-    let people = {
+    let member = {
         id: 123,
         name: 'zhn',
         age: 24
@@ -90,7 +90,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/base/rest/post',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -102,7 +102,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/base/rest/post2',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -126,7 +126,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/base/rest/post/pathandbody',
             dataType: 'text',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             contentType: 'application/json;charset=UTF-8',
             success: function (result) {
                 console.log(result);
@@ -139,7 +139,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/base/rest/postObj',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -152,7 +152,7 @@
             url: '${pageContext.request.contextPath}/base/rest/postObj2',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             success: function (result) {
                 console.log(result);
             }
@@ -165,7 +165,7 @@
             url: '${pageContext.request.contextPath}/base/rest/postObjStr',
             dataType: 'text',
             contentType: 'application/json',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             success: function (result) {
                 console.log(result);
             }
@@ -199,7 +199,7 @@
             attr: 'put',
             url: '${pageContext.request.contextPath}/base/rest/put',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -211,7 +211,7 @@
             attr: 'put',
             url: '${pageContext.request.contextPath}/base/rest/putObj',
             dataType: 'text',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             contentType: 'application/json',
             success: function (result) {
                 console.log(result);

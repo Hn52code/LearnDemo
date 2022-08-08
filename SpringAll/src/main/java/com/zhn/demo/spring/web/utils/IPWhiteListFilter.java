@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 白名单过滤器
  */
-public class WhiteListFilter implements Filter {
+public class IPWhiteListFilter implements Filter {
 
     /* 编码 */
     private String encoding;

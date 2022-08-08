@@ -9,6 +9,6 @@
 
     <import resource="classpath:mq-public.xml"/>
 
-    <context:component-scan base-package="com.zhn.demo.rabbitmq.amqp.rpc.server"/>
+    <context:component-scan base-package="com.zhn.demo.rabbitmq.amqp.rpc.information"/>
 
 </beans>

@@ -28,7 +28,7 @@ public class LoggingAspect {
 //    }
 
 
-    @Pointcut("execution(* com.zhn.pro.demo.spring.aop.hello.*.*(..))")
+    @Pointcut("execution(* com.zhn.demo.spring.basic.aop.hello.*.*(..))")
     public void pointMethod() {
         // 该方法用于申明切入点表达式，一般无需实现任何逻辑功能。
         // ** 切入点可以在外部引用，通过方法名调用，具体需注意外部使用路径。

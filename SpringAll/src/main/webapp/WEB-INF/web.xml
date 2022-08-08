@@ -22,7 +22,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-
     <!--<filter>-->
     <!--<filter-name>CharacterFilter</filter-name>-->
     <!--<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>-->
@@ -40,7 +39,7 @@
     <!-- 此处包括编码,IP过滤 -->
     <filter>
         <filter-name>CustomFilter</filter-name>
-        <filter-class>com.zhn.demo.spring.web.utils.WhiteListFilter</filter-class>
+        <filter-class>com.zhn.demo.spring.web.utils.IPWhiteListFilter</filter-class>
         <!--设置编码-->
         <init-param>
             <param-name>encoding</param-name>
@@ -56,7 +55,6 @@
         <filter-name>CustomFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
     <!-- 处理PUT提交参数(只对基础表单生效) -->
     <!--<filter>-->

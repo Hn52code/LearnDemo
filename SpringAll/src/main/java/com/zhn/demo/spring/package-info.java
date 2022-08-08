@@ -1,4 +1,4 @@
 /**
- * spring体系中一下框架
+ * springmvc中，web相关
  */
 package com.zhn.demo.spring;

@@ -1,13 +1,13 @@
-package com.zhn.demo.spring.basic.ioc2;
+package com.zhn.demo.spring.basic.ioc;
 
-public class Server {
+public class Information {
 
     private String name;
 
-    public Server() {
+    public Information() {
     }
 
-    public Server(String name) {
+    public Information(String name) {
         this.name = name;
         System.out.println("construct " + this.name);
     }

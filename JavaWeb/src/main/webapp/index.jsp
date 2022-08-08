@@ -26,7 +26,7 @@
 </body>
 <script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 <script>
-    let people = {
+    let member = {
         id: 123,
         name: 'zhn',
         age: 24
@@ -49,7 +49,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/rest',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -61,7 +61,7 @@
             attr: 'put',
             url: '${pageContext.request.contextPath}/rest',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -84,7 +84,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/parameter',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -96,7 +96,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/parameter?name=paian&age=12',
             dataType: 'text',
-            data: people,
+            data: member,
             success: function (result) {
                 console.log(result);
             }
@@ -108,7 +108,7 @@
             attr: 'post',
             url: '${pageContext.request.contextPath}/parameter',
             dataType: 'text',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             contentType: 'application/json',
             success: function (result) {
                 console.log(result);
@@ -121,7 +121,7 @@
             attr: 'put',
             url: '${pageContext.request.contextPath}/parameter',
             dataType: 'text',
-            data: JSON.stringify(people),
+            data: JSON.stringify(member),
             contentType: 'application/json',
             success: function (result) {
                 console.log(result);
