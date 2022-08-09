@@ -1,6 +1,6 @@
-package com.zhn.demo.spring.web.result;
+package com.zhn.demo.spring.web.res;
 
-public enum ApiResultCode {
+public enum Code {
 
     USER_NOT_EXIST(1001,"用户不存在"),
     USER_PWD_ERROR(1002,"用户或密码错误"),
@@ -8,7 +8,7 @@ public enum ApiResultCode {
     private int code;
     private String desc;
 
-    ApiResultCode(int code, String desc) {
+    Code(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }

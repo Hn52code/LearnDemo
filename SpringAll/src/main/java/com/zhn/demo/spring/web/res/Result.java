@@ -1,14 +1,14 @@
-package com.zhn.demo.spring.web.result;
+package com.zhn.demo.spring.web.res;
 
 // App之API 返回结果统一bean
-public class ApiResult {
+public class Result {
 
     //错误码
     private int code;
     //信息提示
     private String msg;
     //时间
-    private String createTime;
+    private long createTime;
     //url
     private String url;
     //数据
@@ -38,11 +38,11 @@ public class ApiResult {
         this.data = data;
     }
 
-    public String getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -54,14 +54,14 @@ public class ApiResult {
         this.url = url;
     }
 
-    public ApiResult() {
+    public Result() {
     }
 
-    public ApiResult(int code, String msg, String url, String createTime, Object data) {
+    public Result(int code, String msg, long createTime, String url, Object data) {
         this.code = code;
         this.msg = msg;
-        this.url = url;
         this.createTime = createTime;
+        this.url = url;
         this.data = data;
     }
 
