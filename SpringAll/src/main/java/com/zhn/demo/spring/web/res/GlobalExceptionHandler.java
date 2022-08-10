@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     })
     public Result handle400Exception1(HttpServletRequest request) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
-                "请求错误：丢失PathVariable/请求参数，可能引起方法不允许（405错误）",
+                "请求错误：丢失请求参数",
                 request.getRequestURI());
     }
 

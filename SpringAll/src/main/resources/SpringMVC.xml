@@ -14,24 +14,28 @@
     <context:annotation-config/>
     <context:component-scan base-package="com.zhn.demo.spring.web.controller"/>
 
+    <mvc:annotation-driven/>
+
     <!-- 消息转换器 -->
-    <mvc:annotation-driven>
-        <!-- 消息转换器 -->
+    <!--<mvc:annotation-driven>
+        &lt;!&ndash; 消息转换器 &ndash;&gt;
         <mvc:message-converters register-defaults="false">
+            &lt;!&ndash; 字符串转换器 &ndash;&gt;
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                 <constructor-arg value="UTF-8"/>
             </bean>
-            <!--fastjson-->
+             &lt;!&ndash; Fastjson &ndash;&gt;
             <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
-                        <!--这里顺序不能反，一定要先写text/html，不然IE下会出现下载提示-->
+                        &lt;!&ndash;这里顺序不能反，一定要先写text/html，不然IE下会出现下载提示&ndash;&gt;
                         <value>text/html;charset=UTF-8</value>
                         <value>application/json;charset=UTF-8</value>
                     </list>
                 </property>
             </bean>
-            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            &lt;!&ndash; Jackson &ndash;&gt;
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 &lt;!&ndash; 请求类型 &ndash;&gt;
                 <property name="defaultCharset" value="UTF-8"/>
                 <property name="supportedMediaTypes">
@@ -42,12 +46,12 @@
                 </property>
                 &lt;!&ndash; 响应默认处理方式 &ndash;&gt;
                 <property name="objectMapper">
-                    &lt;!&ndash; 自定义 objmapper&ndash;&gt;
+                    &lt;!&ndash; 自定义 objMapper&ndash;&gt;
                     <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
                         &lt;!&ndash; 时间格式 &ndash;&gt;
                         <property name="dateFormat">
                             <bean class="java.text.SimpleDateFormat">
-                                <constructor-arg attr="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
                             </bean>
                         </property>
                         &lt;!&ndash; 去掉空 &ndash;&gt;
@@ -56,19 +60,19 @@
                         &lt;!&ndash;<property name="propertyNamingStrategy" value="SNAKE_CASE"/>&ndash;&gt;
                     </bean>
                 </property>
-            </bean>-->
+            </bean>
         </mvc:message-converters>
-    </mvc:annotation-driven>
+    </mvc:annotation-driven>-->
 
     <!-- 自定义枚举转换器 -->
-    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+    <!--<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
         <property name="converters">
             <list>
-                <!-- springmvc中自带的枚举转换，无须额外实现，如特殊需求可自定义实现 -->
-                <!--<bean class="com.zhn.demo.spring.web.utils.StringToEnumConverter"/>-->
+                &lt;!&ndash; springmvc中自带的枚举转换，无须额外实现，如特殊需求可自定义实现 &ndash;&gt;
+                <bean class="com.zhn.demo.spring.web.utils.StringToEnumConverter"/>
             </list>
         </property>
-    </bean>
+    </bean>-->
 
     <!-- 允许资源通过，3.0之前使用如下配置 -->
     <!-- 注意mapping的值为uri后配**表示所有，切勿在location值后加**，否则找不到资源。-->
@@ -100,9 +104,9 @@
     <!--<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basenames">
             <list>
-                &lt;!&ndash; 在web环境中一定要定位到classpath 否则默认到当前web应用下找  &ndash;&gt;
+                &lt;!&ndash; 在web环境中一定要定位到 classpath 否则默认到当前web应用下找 &ndash;&gt;
                 <value>classpath:validationMessages</value>
-                &lt;!&ndash;<value>classpath:org/hibernate/validator/ValidationMessages</value>&ndash;&gt;
+                <value>classpath:org/hibernate/validator/ValidationMessages</value>
             </list>
         </property>
         <property name="useCodeAsDefaultMessage" value="false"/>
@@ -112,13 +116,11 @@
 
     <!-- 配置视图解析器 -->
     <!-- InternalResourceViewResolver:可以对html的解析器 -->
-<!--
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         &lt;!&ndash; 在视图解析器配置前缀与后缀 &ndash;&gt;
         <property name="prefix" value="/"/>
         <property name="suffix" value=".jsp"/>
-    </bean>
--->
+    </bean>-->
 
     <!-- 配置拦截器 -->
     <mvc:interceptors>

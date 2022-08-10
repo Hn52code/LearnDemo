@@ -1,6 +1,8 @@
 package com.zhn.demo.spring.web.controller;
 
 import com.zhn.demo.spring.web.entity.Company;
+import com.zhn.demo.spring.web.res.Result;
+import com.zhn.demo.spring.web.res.ResultUtil;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -12,6 +14,7 @@ import javax.validation.constraints.Min;
 import java.util.List;
 
 /* demo 参数验证 */
+/* 测试发现报错行为，实际请求参数超出预设参数 */
 @Validated  // 告诉MethodValidationPostProcessor此Bean需要开启方法级别验证支持
 @RestController
 @RequestMapping(value = "/valid/paras")
@@ -28,24 +31,25 @@ public class ValidParasController {
      */
 
     /* 验证普通参数 url: /extend/parameter/valid/18?name=zhouhainan */
-    @GetMapping("/simple/{age}")
-    public void validSimpleParameter(
-            @Min(value = 18, message = "未成年不可") @PathVariable("age") int age,
+    @GetMapping("/simple/{id}")
+    public Result validSimpleParameter(
+            @Min(value = 0, message = "编号不可低于0") @PathVariable("id") int id,
             @Length(min = 5, max = 16, message = "长度不符") @RequestParam("name") String name) {
-        System.out.println("age: " + age + " name: " + name);
+        System.out.println("id: " + id + " name: " + name);
+        return ResultUtil.createSucResult(null);
     }
 
     /* 表单实体 接收Content-Type为application/x-www-form-urlencoded */
     @PostMapping("/obj")
-    public String validEntityParaBodyThrowError(@Valid Company company) {
+    public Result validEntityParaBodyThrowError(@Valid Company company) {
         System.out.println(company.toString());
-        return "";
+        return ResultUtil.createSucResult(null);
     }
 
     /* 当被检验的参数后不跟 BindingResult result，则错误将上抛至全局异常，做全局异常统一处理时，此处这处理便好 */
     /* json实体 */
     @PostMapping("/obj/json/validresult")
-    public String validEntityParaByRequestBodyAndBindResult(@RequestBody @Valid Company company, BindingResult result) {
+    public Result validEntityParaByRequestBodyAndBindResult(@RequestBody @Valid Company company, BindingResult result) {
         System.out.println(company.toString());
         StringBuilder builder = new StringBuilder();
         if (result.hasErrors()) {
@@ -53,14 +57,14 @@ public class ValidParasController {
             for (ObjectError error : allErrors)
                 builder.append(error.getDefaultMessage());
         }
-        return builder.toString();
+        return ResultUtil.createSucResult(null);
     }
 
     /* json实体 */
     @PostMapping("/obj/json")
-    public String validEntityParaByRequestBodyThrowError(@RequestBody @Valid Company company) {
+    public Result validEntityParaByRequestBodyThrowError(@RequestBody @Valid Company company) {
         System.out.println(company.toString());
-        return "";
+        return ResultUtil.createSucResult(null);
     }
 
 }

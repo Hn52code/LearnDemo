@@ -1,6 +1,9 @@
 package com.zhn.demo.spring.web.res;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 // App之API 返回结果统一bean
+@JsonInclude(JsonInclude.Include.NON_ABSENT)
 public class Result {
 
     //错误码
@@ -13,6 +16,8 @@ public class Result {
     private String url;
     //数据
     private Object data;
+    // 其它
+    private int sum;
 
     public void setCode(int code) {
         this.code = code;
@@ -52,6 +57,14 @@ public class Result {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getSum() {
+        return sum;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
     }
 
     public Result() {
