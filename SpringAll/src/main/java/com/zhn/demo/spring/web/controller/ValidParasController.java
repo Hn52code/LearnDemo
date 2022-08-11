@@ -30,17 +30,18 @@ public class ValidParasController {
      * JSR和Hibernate validator的校验只能对Object的属性进行校验。
      */
 
-    /* 验证普通参数 url: /extend/parameter/valid/18?name=zhouhainan */
-    @GetMapping("/simple/{id}")
+    /* 验证普通参数 url: /valid/paras/simple_{type}/{id}?name=xxx */
+    @GetMapping("/simple_{type}/{id}")
     public Result validSimpleParameter(
+            @PathVariable("type") int type,
             @Min(value = 0, message = "编号不可低于0") @PathVariable("id") int id,
             @Length(min = 5, max = 16, message = "长度不符") @RequestParam("name") String name) {
-        System.out.println("id: " + id + " name: " + name);
+        System.out.println("type: " + type + "id: " + id + " name: " + name);
         return ResultUtil.createSucResult(null);
     }
 
     /* 表单实体 接收Content-Type为application/x-www-form-urlencoded */
-    @PostMapping("/obj")
+    @PostMapping(value = "/obj", consumes = "application/x-www-form-urlencoded")
     public Result validEntityParaBodyThrowError(@Valid Company company) {
         System.out.println(company.toString());
         return ResultUtil.createSucResult(null);
@@ -61,7 +62,7 @@ public class ValidParasController {
     }
 
     /* json实体 */
-    @PostMapping("/obj/json")
+    @PostMapping(value = "/obj/json", consumes = "application/json")
     public Result validEntityParaByRequestBodyThrowError(@RequestBody @Valid Company company) {
         System.out.println(company.toString());
         return ResultUtil.createSucResult(null);

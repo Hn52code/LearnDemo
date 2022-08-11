@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class AccessToken {
 
-    @NotNull(message = "accessToken不能为空")
+    @NotNull(message = "accessToken不能为null")
     private String accessToken;
 
     public String getAccessToken() {
