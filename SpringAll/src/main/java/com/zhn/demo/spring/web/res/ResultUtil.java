@@ -32,7 +32,7 @@ public class ResultUtil {
      * @return 结果
      */
     public static Result createSucResult(Object data) {
-        return new Result(0, "请求成功", System.currentTimeMillis(), null, data);
+        return new Result(200, "请求成功", System.currentTimeMillis(), null, data);
     }
 
 

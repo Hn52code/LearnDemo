@@ -21,9 +21,11 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 全局异常：本bean中定义了全局异常统一处理
@@ -35,13 +37,11 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    /* http请求 异常错误 */
-
     /* 400错误，丢失URI参数 */
     @ExceptionHandler(MissingPathVariableException.class)
     public Result handle400MissUriExc(HttpServletRequest request, MissingPathVariableException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
-                "请求错误-> 丢失请求参数：" + e.getVariableName(),
+                "请求错误-> 丢失请求参数：URI " + e.getVariableName(),
                 request.getRequestURI());
     }
 
@@ -69,19 +69,6 @@ public class GlobalExceptionHandler {
                 request.getRequestURI());
     }
 
-    /* 400 请求错误，请求参数与预定参数不符 */
-    @ExceptionHandler(BindException.class)
-    public Result handle400BindExceptionExc(HttpServletRequest request, BindException e) {
-        StringBuilder buffer = new StringBuilder();
-        List<ObjectError> errors = e.getBindingResult().getAllErrors();
-        for (ObjectError err : errors) {
-            buffer.append(err.getDefaultMessage()).append("；");
-        }
-        return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
-                "请求错误-> 请求参数与预定参数不符：" + buffer,
-                request.getRequestURI());
-    }
-
     /* 400 请求错误，请求参数不可读 */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public Result handle400NotReadableExc(HttpServletRequest request) {
@@ -90,24 +77,39 @@ public class GlobalExceptionHandler {
                 request.getRequestURI());
     }
 
-    /* 400 错误中，接口方法中被验证注解修饰的 复杂 类型参时，验证错误时抛出异常 */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result handle400NotValidExc(HttpServletRequest request, MethodArgumentNotValidException e) {
+    /* 400 请求错误，接口方法中被验证注解修饰的“表单-复杂类型”参时，验证错误时抛出异常 */
+    @ExceptionHandler(BindException.class)
+    public Result handle400BindExceptionExc(HttpServletRequest request, BindException e) {
         StringBuilder buffer = new StringBuilder();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
-        for (ObjectError err : errors) {
-            buffer.append(err.getDefaultMessage()).append("；");
-        }
+        errors.forEach(k -> buffer.append(k.getDefaultMessage()).append("；"));
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 请求参数无效：" + buffer,
                 request.getRequestURI());
     }
 
-    /* 400错误中，接口方法中被验证注解修饰的 简单 类型参时，验证错误抛出该异常 */
+    /* 400 错误中，接口方法中被验证注解修饰的“json-复杂类型”参时，验证错误时抛出异常 */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result handle400NotValidExc(HttpServletRequest request, MethodArgumentNotValidException e) {
+        StringBuilder buffer = new StringBuilder();
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        errors.forEach(k -> buffer.append(k.getDefaultMessage()).append("；"));
+        return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
+                "请求错误-> 请求参数无效：" + buffer,
+                request.getRequestURI());
+    }
+
+    /**
+     * 400错误中，接口方法中被验证注解修饰的“简单”类型参时，验证错误抛出该异常。
+     * 此处有个小BUG，当注解使用@Valid来注解参数后跟随BindingResult实例后，所产生的错误由本异常类型接收
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public Result handle400ConstraintExc(HttpServletRequest request, ConstraintViolationException e) {
+        StringBuilder buffer = new StringBuilder();
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        violations.forEach(k -> buffer.append(k.getMessage()).append("；"));
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
-                "请求错误-> 请求参数无效：" + e.getLocalizedMessage(),
+                "请求错误-> 请求参数无效：" + buffer,
                 request.getRequestURI());
     }
 
@@ -131,7 +133,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FileUploadException.class)
     public Result handle400UploadFileExc(HttpServletRequest request, FileUploadException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
-                "请求错误-> 文件上传错误",
+                "请求错误-> 文件上传错误，" + e.getMessage(),
                 request.getRequestURI());
     }
 
