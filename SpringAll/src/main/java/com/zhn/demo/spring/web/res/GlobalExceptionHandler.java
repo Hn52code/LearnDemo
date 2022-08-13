@@ -13,6 +13,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -39,6 +40,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误，丢失URI参数 */
     @ExceptionHandler(MissingPathVariableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400MissUriExc(HttpServletRequest request, MissingPathVariableException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 丢失请求参数：URI " + e.getVariableName(),
@@ -47,6 +49,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误，丢失query参数 */
     @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400MissParasExc(HttpServletRequest request, MissingServletRequestParameterException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 丢失请求参数：" + e.getParameterName() + ":" + e.getParameterType(),
@@ -55,6 +58,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误，丢失参数 */
     @ExceptionHandler(ServletRequestBindingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400MissParas2Exc(HttpServletRequest request, ServletRequestBindingException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 丢失请求参数",
@@ -63,6 +67,7 @@ public class GlobalExceptionHandler {
 
     /* 400 请求错误，类型转换不允许 */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400TypeMismatchExc(HttpServletRequest request, MethodArgumentTypeMismatchException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 请求参数与预定类型不符，参数(" + e.getName() + ")类型为" + e.getRequiredType(),
@@ -71,6 +76,7 @@ public class GlobalExceptionHandler {
 
     /* 400 请求错误，请求参数不可读 */
     @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400NotReadableExc(HttpServletRequest request) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "错误请求-> 请求参数不可读，请确认content-type类型",
@@ -79,6 +85,7 @@ public class GlobalExceptionHandler {
 
     /* 400 请求错误，接口方法中被验证注解修饰的“表单-复杂类型”参时，验证错误时抛出异常 */
     @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400BindExceptionExc(HttpServletRequest request, BindException e) {
         StringBuilder buffer = new StringBuilder();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
@@ -90,6 +97,7 @@ public class GlobalExceptionHandler {
 
     /* 400 错误中，接口方法中被验证注解修饰的“json-复杂类型”参时，验证错误时抛出异常 */
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400NotValidExc(HttpServletRequest request, MethodArgumentNotValidException e) {
         StringBuilder buffer = new StringBuilder();
         List<ObjectError> errors = e.getBindingResult().getAllErrors();
@@ -104,6 +112,7 @@ public class GlobalExceptionHandler {
      * 此处有个小BUG，当注解使用@Valid来注解参数后跟随BindingResult实例后，所产生的错误由本异常类型接收
      */
     @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400ConstraintExc(HttpServletRequest request, ConstraintViolationException e) {
         StringBuilder buffer = new StringBuilder();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
@@ -115,6 +124,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误，丢失Multipart参数 */
     @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400UploadFileExc(HttpServletRequest request, MissingServletRequestPartException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 文件参数丢失，" + e.getRequestPartName(),
@@ -123,6 +133,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误中，处理文件上传异常 */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400UploadFileExc(HttpServletRequest request, MaxUploadSizeExceededException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 文件上传超限，允许文件最大" + (e.getMaxUploadSize() / 1024 / 1024) + "MB",
@@ -131,6 +142,7 @@ public class GlobalExceptionHandler {
 
     /* 400错误中，处理文件上传异常 */
     @ExceptionHandler(FileUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handle400UploadFileExc(HttpServletRequest request, FileUploadException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.BAD_REQUEST.value(),
                 "请求错误-> 文件上传错误，" + e.getMessage(),
@@ -139,6 +151,7 @@ public class GlobalExceptionHandler {
 
     /* 404 资源找不到错误 */
     @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public Result handle404Exc(NoHandlerFoundException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.NOT_FOUND.value(),
                 "找不到服务，URI：" + e.getRequestURL() + " 方法：" + e.getHttpMethod(), null);
@@ -146,6 +159,7 @@ public class GlobalExceptionHandler {
 
     /* 405 方法不允许错误 */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public Result handle405Exc(HttpServletRequest request, HttpRequestMethodNotSupportedException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.METHOD_NOT_ALLOWED.value(),
                 "请求错误-> 方法不被允许，支持方法：" + Arrays.toString(e.getSupportedMethods()),
@@ -154,6 +168,7 @@ public class GlobalExceptionHandler {
 
     /* 406 不接受 无法使用请求的内容特性响应请求的网页 */
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public Result handle406Exc(HttpServletRequest request, HttpMediaTypeNotAcceptableException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.NOT_ACCEPTABLE.value(),
                 "请求错误-> 拒绝响应类型：" + e.getMessage(),
@@ -162,6 +177,7 @@ public class GlobalExceptionHandler {
 
     /* 415 服务器无法处理请求附带的媒体格式 */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public Result handle415Exc(HttpServletRequest request, HttpMediaTypeNotSupportedException e) {
         return ResultUtil.createHttpExcResult(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(),
                 "请求错误-> 媒体类型不支持，content-type：" + e.getContentType() + "，请改为：" + e.getSupportedMediaTypes(),
@@ -171,6 +187,7 @@ public class GlobalExceptionHandler {
     /* 500 服务器内部错误 */
     // HttpMessageNotWritableException.class
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result handle500Exc(HttpServletRequest request, Exception e) {
         return ResultUtil.createHttpExcResult(HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "服务端错误-> " + e.getMessage(),
@@ -179,6 +196,7 @@ public class GlobalExceptionHandler {
 
     /* 503 服务不可用 */
     @ExceptionHandler(AsyncRequestTimeoutException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public Result handle503Exc(HttpServletRequest request) {
         return ResultUtil.createHttpExcResult(HttpStatus.SERVICE_UNAVAILABLE.value(),
                 "服务端错误-> 不可用，异步请求超时",
@@ -188,6 +206,7 @@ public class GlobalExceptionHandler {
     /* 自定义错误 */
     /* 业务异常包含所有业务异常捕捉 */
     @ExceptionHandler(CustomException.class)
+    @ResponseStatus(HttpStatus.OK)
     public Result handleCustomExc(HttpServletRequest request, CustomException e) {
         return ResultUtil.createCustomExcResult(e.getCode(), "业务错误-> " + e.getMessage(), request.getRequestURI());
     }
